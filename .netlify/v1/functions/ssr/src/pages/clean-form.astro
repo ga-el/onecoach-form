@@ -1,0 +1,604 @@
+---
+// Form configuration
+const formConfig = {
+  title: "MÚLTIPLE EMPRESARIAL - ONE COACH DAÑOS",
+  logo: "/images/logo-one-coach.png",
+  theme: {
+    primary: "#002366", // Royal blue
+    secondary: "#ffffff", // White
+    accent: "#e74c3c",
+    background: "#f8f9fa",
+    text: "#2c3e50"
+  }
+};
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{formConfig.title}</title>
+    <meta name="description" content="Formulario de solicitud múltiple empresarial para ONE COACH DAÑOS">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: ${formConfig.theme.primary};
+            --secondary: ${formConfig.theme.secondary};
+            --accent: ${formConfig.theme.accent};
+            --background: ${formConfig.theme.background};
+            --text: ${formConfig.theme.text};
+            --white: #ffffff;
+            --gray-light: #f1f5f9;
+            --gray: #94a3b8;
+            --gray-dark: #475569;
+            --success: #10b981;
+            --error: #ef4444;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, #1a4b8c 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .form-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-header {
+            background: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .logo {
+            max-height: 80px;
+            margin-bottom: 1rem;
+        }
+
+        .form-title {
+            color: var(--primary);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-light);
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            flex: 1 1 300px;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-dark);
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="tel"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 35, 102, 0.1);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-footer {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .form-note {
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn i {
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a4b8c 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--gray-dark) 0%, var(--gray) 100%);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent) 0%, #c0392b 100%);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .company-item {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .company-title {
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        .remove-company {
+            background: none;
+            border: none;
+            color: var(--error);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            line-height: 1;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .remove-company:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .error {
+            border-color: var(--error) !important;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            opacity: 0.7;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .form-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .form-group {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <header class="form-header">
+            <img src={formConfig.logo} alt="ONE COACH DAÑOS" class="logo">
+            <h1 class="form-title">MÚLTIPLE EMPRESARIAL</h1>
+        </header>
+        
+        <form id="solicitudForm" class="form-body">
+            <section class="form-section">
+                <h2 class="section-title">DATOS GENERALES</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombreAgente" class="required">NOMBRE DEL AGENTE</label>
+                        <input type="text" id="nombreAgente" name="nombreAgente" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha">FECHA</label>
+                        <input type="date" id="fecha" name="fecha">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tipoSolicitud">TIPO DE SOLICITUD</label>
+                        <select id="tipoSolicitud" name="tipoSolicitud">
+                            <option value="">Seleccione una opción</option>
+                            <option value="nueva">Nueva</option>
+                            <option value="renovacion">Renovación</option>
+                            <option value="cambio">Cambio</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prioridad">PRIORIDAD</label>
+                        <select id="prioridad" name="prioridad">
+                            <option value="baja">Baja</option>
+                            <option value="media" selected>Media</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <div class="company-header">
+                    <h2 class="section-title">EMPRESAS</h2>
+                    <button type="button" id="btnAgregarEmpresa" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Agregar Empresa
+                    </button>
+                </div>
+                
+                <div id="empresasContainer">
+                    <!-- Las empresas se agregarán aquí dinámicamente -->
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2 class="section-title">COMENTARIOS ADICIONALES</h2>
+                <div class="form-group">
+                    <textarea id="comentariosAdicionales" name="comentariosAdicionales" rows="4" placeholder="Escriba aquí cualquier comentario adicional..."></textarea>
+                </div>
+            </section>
+
+            <footer class="form-footer">
+                <div class="form-note">
+                    <i class="fas fa-info-circle"></i> Los campos marcados con * son obligatorios
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="btnLimpiar" class="btn btn-secondary">
+                        <i class="fas fa-eraser"></i> Limpiar Formulario
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Enviar Solicitud
+                    </button>
+                </div>
+            </footer>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date
+            const today = new Date().toISOString().split('T')[0];
+            const fechaInput = document.getElementById('fecha');
+            if (fechaInput) fechaInput.value = today;
+            
+            // Add company button
+            const btnAgregarEmpresa = document.getElementById('btnAgregarEmpresa');
+            if (btnAgregarEmpresa) {
+                btnAgregarEmpresa.addEventListener('click', agregarEmpresa);
+            }
+            
+            // Clear form button
+            const btnLimpiar = document.getElementById('btnLimpiar');
+            if (btnLimpiar) {
+                btnLimpiar.addEventListener('click', limpiarFormulario);
+            }
+            
+            // Form submission
+            const solicitudForm = document.getElementById('solicitudForm');
+            if (solicitudForm) {
+                solicitudForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (validarFormulario()) {
+                        mostrarAlerta('Formulario enviado correctamente', 'success');
+                        // Descomentar la siguiente línea para limpiar el formulario después de enviar
+                        // limpiarFormulario();
+                    }
+                });
+            }
+            
+            // Add first company by default
+            agregarEmpresa();
+            
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+        
+        let companyCounter = 0;
+        
+        function agregarEmpresa() {
+            companyCounter++;
+            const companyHTML = `
+                <div class="company-item" id="empresa-${companyCounter}">
+                    <div class="company-header">
+                        <h3 class="company-title">Empresa ${companyCounter}</h3>
+                        <button type="button" class="remove-company" 
+                                onclick="document.getElementById('empresa-${companyCounter}').remove()"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar empresa">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="empresa${companyCounter}" class="required">Nombre de la Empresa</label>
+                            <input type="text" id="empresa${companyCounter}" name="empresas[${companyCounter}][nombre]" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="rfc${companyCounter}">RFC</label>
+                            <input type="text" id="rfc${companyCounter}" name="empresas[${companyCounter}][rfc]">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contacto${companyCounter}">Persona de Contacto</label>
+                            <input type="text" id="contacto${companyCounter}" name="empresas[${companyCounter}][contacto]">
+                        </div>
+                        <div class="form-group">
+                            <label for="email${companyCounter}">Correo Electrónico</label>
+                            <input type="email" id="email${companyCounter}" name="empresas[${companyCounter}][email]">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comentarios${companyCounter}">Comentarios Adicionales</label>
+                        <textarea id="comentarios${companyCounter}" name="empresas[${companyCounter}][comentarios]" rows="2"></textarea>
+                    </div>
+                </div>
+            `;
+            
+            const container = document.createElement('div');
+            container.innerHTML = companyHTML;
+            const empresasContainer = document.getElementById('empresasContainer');
+            if (empresasContainer) {
+                empresasContainer.appendChild(container.firstElementChild);
+                
+                // Initialize tooltip for the new remove button
+                const newRemoveBtn = empresasContainer.querySelector(`#empresa-${companyCounter} .remove-company`);
+                if (newRemoveBtn) {
+                    new bootstrap.Tooltip(newRemoveBtn);
+                }
+                
+                // Scroll to the new company
+                const newCompany = document.getElementById(`empresa-${companyCounter}`);
+                if (newCompany) {
+                    newCompany.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+        
+        function validarFormulario() {
+            let isValid = true;
+            const requiredFields = document.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                const errorMsg = field.nextElementSibling?.classList?.contains('error-message') 
+                    ? field.nextElementSibling 
+                    : null;
+                
+                if (!field.value.trim()) {
+                    field.classList.add('error');
+                    if (errorMsg) {
+                        errorMsg.textContent = 'Este campo es obligatorio';
+                    } else {
+                        const newErrorMsg = document.createElement('span');
+                        newErrorMsg.className = 'error-message';
+                        newErrorMsg.textContent = 'Este campo es obligatorio';
+                        field.parentNode.insertBefore(newErrorMsg, field.nextSibling);
+                    }
+                    isValid = false;
+                } else {
+                    field.classList.remove('error');
+                    if (errorMsg) {
+                        errorMsg.textContent = '';
+                    }
+                }
+            });
+            
+            if (!isValid) {
+                mostrarAlerta('Por favor complete todos los campos obligatorios', 'error');
+                const firstError = document.querySelector('.error');
+                if (firstError) firstError.focus();
+            }
+            
+            return isValid;
+        }
+        
+        function mostrarAlerta(mensaje, tipo = 'info') {
+            // Remove any existing alerts
+            const existingAlert = document.querySelector('.alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${tipo} alert-dismissible fade show`;
+            alertDiv.role = 'alert';
+            alertDiv.innerHTML = `
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            `;
+            
+            // Insert after header
+            const header = document.querySelector('.form-header');
+            if (header && header.parentNode) {
+                header.parentNode.insertBefore(alertDiv, header.nextSibling);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alertDiv);
+                    bsAlert.close();
+                }, 5000);
+            }
+        }
+        
+        function limpiarFormulario() {
+            if (confirm('¿Está seguro de que desea limpiar todo el formulario? Se perderán todos los datos ingresados.')) {
+                const form = document.getElementById('solicitudForm');
+                if (form) form.reset();
+                
+                const empresasContainer = document.getElementById('empresasContainer');
+                if (empresasContainer) empresasContainer.innerHTML = '';
+                
+                companyCounter = 0;
+                agregarEmpresa(); // Add one empty company
+                mostrarAlerta('El formulario ha sido limpiado', 'info');
+            }
+        }
+    </script>
+</body>
+</html>

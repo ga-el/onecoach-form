@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Diagnóstico EmailJS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #002366;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .diagnostic-section {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #002366;
+            background: #f8f9fa;
+        }
+        .status-ok {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+        .status-error {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        .status-warning {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+        .btn {
+            background: linear-gradient(135deg, #002366 0%, #003d82 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: linear-gradient(135deg, #003d82 0%, #002366 100%);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .log {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .test-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .test-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Diagnóstico EmailJS</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Herramienta de diagnóstico para verificar la configuración de EmailJS
+        </p>
+
+        <div class="diagnostic-section">
+            <h3>📋 Configuración Actual</h3>
+            <ul>
+                <li><strong>Public Key:</strong> 9uhWKUO7vI9o1xXgK</li>
+                <li><strong>Service ID:</strong> service_6gnqp8y</li>
+                <li><strong>Template ID:</strong> template_2yre1uf</li>
+                <li><strong>Email destino:</strong> gael.madrid.2009@gmail.com</li>
+            </ul>
+        </div>
+
+        <div class="diagnostic-section">
+            <h3>🧪 Pruebas de Diagnóstico</h3>
+            <button class="btn" onclick="runDiagnostic()">🔍 Ejecutar Diagnóstico Completo</button>
+            <button class="btn" onclick="testEmailJS()">📧 Probar Envío de Email</button>
+            <button class="btn" onclick="clearLog()">🗑️ Limpiar Log</button>
+        </div>
+
+        <div class="diagnostic-section">
+            <h3>📊 Resultados del Diagnóstico</h3>
+            <div id="diagnostic-results"></div>
+        </div>
+
+        <div class="diagnostic-section">
+            <h3>📝 Log de Actividad</h3>
+            <div id="log" class="log"></div>
+        </div>
+
+        <div class="diagnostic-section">
+            <h3>🔧 Información del Sistema</h3>
+            <div id="system-info"></div>
+        </div>
+    </div>
+
+    <script>
+        // EmailJS Configuration
+        const EMAILJS_CONFIG = {
+            PUBLIC_KEY: '9uhWKUO7vI9o1xXgK',
+            SERVICE_ID: 'service_6gnqp8y',
+            TEMPLATE_ID: 'template_2yre1uf'
+        };
+
+        let diagnosticResults = [];
+
+        // Logging function
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            
+            if (logElement) {
+                logElement.innerHTML += logEntry + '\n';
+                logElement.scrollTop = logElement.scrollHeight;
+            }
+            
+            console.log(logEntry);
+        }
+
+        // Clear log
+        function clearLog() {
+            const logElement = document.getElementById('log');
+            if (logElement) {
+                logElement.innerHTML = '';
+            }
+            diagnosticResults = [];
+            updateDiagnosticResults();
+        }
+
+        // Update diagnostic results
+        function updateDiagnosticResults() {
+            const resultsElement = document.getElementById('diagnostic-results');
+            if (!resultsElement) return;
+
+            resultsElement.innerHTML = diagnosticResults.map(result => 
+                `<div class="test-result test-${result.status}">${result.message}</div>`
+            ).join('');
+        }
+
+        // Add diagnostic result
+        function addResult(message, status = 'success') {
+            diagnosticResults.push({ message, status });
+            updateDiagnosticResults();
+        }
+
+        // Load EmailJS SDK
+        function loadEmailJSSDK() {
+            return new Promise((resolve, reject) => {
+                log('🔄 Intentando cargar EmailJS SDK...');
+                
+                if (window.emailjs) {
+                    log('✅ EmailJS ya está cargado');
+                    resolve(window.emailjs);
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                script.async = true;
+                
+                script.onload = () => {
+                    try {
+                        window.emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+                        log('✅ EmailJS SDK cargado e inicializado correctamente');
+                        resolve(window.emailjs);
+                    } catch (error) {
+                        log(`❌ Error al inicializar EmailJS: ${error.message}`, 'error');
+                        reject(error);
+                    }
+                };
+                
+                script.onerror = () => {
+                    log('❌ Error al cargar EmailJS SDK desde CDN', 'error');
+                    reject(new Error('No se pudo cargar EmailJS SDK'));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+
+        // Run complete diagnostic
+        async function runDiagnostic() {
+            log('🚀 Iniciando diagnóstico completo...');
+            clearLog();
+
+            try {
+                // Test 1: Check configuration
+                log('📋 Verificando configuración...');
+                if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.TEMPLATE_ID) {
+                    addResult('✅ Configuración de EmailJS válida', 'success');
+                } else {
+                    addResult('❌ Configuración de EmailJS incompleta', 'error');
+                }
+
+                // Test 2: Check network connectivity
+                log('🌐 Verificando conectividad de red...');
+                try {
+                    const response = await fetch('https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js', { method: 'HEAD' });
+                    if (response.ok) {
+                        addResult('✅ Conectividad de red OK', 'success');
+                    } else {
+                        addResult('⚠️ Problemas de conectividad', 'warning');
+                    }
+                } catch (error) {
+                    addResult('❌ Sin conectividad de red', 'error');
+                }
+
+                // Test 3: Load EmailJS SDK
+                log('📦 Cargando EmailJS SDK...');
+                try {
+                    await loadEmailJSSDK();
+                    addResult('✅ EmailJS SDK cargado correctamente', 'success');
+                } catch (error) {
+                    addResult(`❌ Error al cargar EmailJS SDK: ${error.message}`, 'error');
+                    return;
+                }
+
+                // Test 4: Check EmailJS functions
+                log('🔧 Verificando funciones de EmailJS...');
+                if (window.emailjs && typeof window.emailjs.send === 'function') {
+                    addResult('✅ Función emailjs.send disponible', 'success');
+                } else {
+                    addResult('❌ Función emailjs.send no disponible', 'error');
+                }
+
+                // Test 5: System information
+                log('💻 Recopilando información del sistema...');
+                const systemInfo = {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    cookieEnabled: navigator.cookieEnabled,
+                    onLine: navigator.onLine,
+                    timestamp: new Date().toISOString()
+                };
+
+                const systemInfoElement = document.getElementById('system-info');
+                if (systemInfoElement) {
+                    systemInfoElement.innerHTML = `
+                        <p><strong>Navegador:</strong> ${systemInfo.userAgent}</p>
+                        <p><strong>Plataforma:</strong> ${systemInfo.platform}</p>
+                        <p><strong>Idioma:</strong> ${systemInfo.language}</p>
+                        <p><strong>Cookies habilitadas:</strong> ${systemInfo.cookieEnabled ? 'Sí' : 'No'}</p>
+                        <p><strong>En línea:</strong> ${systemInfo.onLine ? 'Sí' : 'No'}</p>
+                        <p><strong>Timestamp:</strong> ${systemInfo.timestamp}</p>
+                    `;
+                }
+
+                addResult('✅ Información del sistema recopilada', 'success');
+                log('✅ Diagnóstico completo finalizado');
+
+            } catch (error) {
+                log(`❌ Error durante el diagnóstico: ${error.message}`, 'error');
+                addResult(`❌ Error durante el diagnóstico: ${error.message}`, 'error');
+            }
+        }
+
+        // Test email sending
+        async function testEmailJS() {
+            log('📧 Iniciando prueba de envío de email...');
+            
+            try {
+                await loadEmailJSSDK();
+                
+                const params = {
+                    nombre: 'Prueba de Diagnóstico',
+                    email: 'test@diagnostico.com',
+                    mensaje: 'Este es un email de prueba desde el diagnóstico',
+                    to_email: 'gael.madrid.2009@gmail.com',
+                    submission_date: new Date().toLocaleString('es-MX'),
+                    form_type: 'DIAGNÓSTICO',
+                    year: new Date().getFullYear()
+                };
+
+                log('📨 Enviando email de prueba...');
+                const result = await window.emailjs.send(
+                    EMAILJS_CONFIG.SERVICE_ID,
+                    EMAILJS_CONFIG.TEMPLATE_ID,
+                    params
+                );
+
+                log('✅ Email de prueba enviado exitosamente');
+                addResult('✅ Email de prueba enviado exitosamente', 'success');
+                
+                // Show result details
+                log(`📊 Resultado: ${JSON.stringify(result, null, 2)}`);
+
+            } catch (error) {
+                log(`❌ Error al enviar email de prueba: ${error.message}`, 'error');
+                addResult(`❌ Error al enviar email: ${error.message}`, 'error');
+                
+                // Show detailed error
+                if (error.text) {
+                    log(`📋 Detalles del error: ${error.text}`);
+                }
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Diagnóstico EmailJS iniciado');
+            log('💡 Haz clic en "Ejecutar Diagnóstico Completo" para comenzar');
+        });
+    </script>
+</body>
+</html>

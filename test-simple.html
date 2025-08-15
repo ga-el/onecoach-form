@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Súper Simple - EmailJS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #002366;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #002366;
+        }
+        .btn {
+            background: linear-gradient(135deg, #002366 0%, #003d82 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: linear-gradient(135deg, #003d82 0%, #002366 100%);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .notification-success {
+            background: #10b981;
+        }
+        .notification-error {
+            background: #ef4444;
+        }
+        .notification-info {
+            background: #3b82f6;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border-left: 4px solid #002366;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Prueba Súper Simple - EmailJS</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Formulario de prueba para verificar que EmailJS funciona correctamente
+        </p>
+
+        <form id="simple-form">
+            <div class="form-group">
+                <label for="nombre">Nombre *</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mensaje">Mensaje</label>
+                <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe un mensaje de prueba..."></textarea>
+            </div>
+
+            <button type="submit" class="btn" id="submit-btn">
+                🚀 Enviar Prueba Simple
+            </button>
+        </form>
+
+        <div class="status">
+            <h3>📋 Estado de la Configuración:</h3>
+            <ul>
+                <li><strong>Public Key:</strong> 9uhWKUO7vI9o1xXgK ✅</li>
+                <li><strong>Service ID:</strong> service_6gnqp8y ✅</li>
+                <li><strong>Template ID:</strong> template_2yre1uf ✅</li>
+                <li><strong>Email destino:</strong> gael.madrid.2009@gmail.com ✅</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px;">
+            <h3>✅ Instrucciones:</h3>
+            <ol>
+                <li>Completa el nombre y email</li>
+                <li>Haz clic en "Enviar Prueba Simple"</li>
+                <li>Verifica la notificación</li>
+                <li>Revisa tu email en gael.madrid.2009@gmail.com</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // EmailJS Configuration
+        const EMAILJS_CONFIG = {
+            PUBLIC_KEY: '9uhWKUO7vI9o1xXgK',
+            SERVICE_ID: 'service_6gnqp8y',
+            TEMPLATE_ID: 'template_2yre1uf'
+        };
+
+        // Notification System
+        function showNotification(message, type = 'info', duration = 6000) {
+            const container = document.getElementById('notification-container') || createNotificationContainer();
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, duration);
+        }
+
+        function createNotificationContainer() {
+            const container = document.createElement('div');
+            container.id = 'notification-container';
+            container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+            document.body.appendChild(container);
+            return container;
+        }
+
+        // Load EmailJS SDK
+        function loadEmailJSSDK() {
+            return new Promise((resolve, reject) => {
+                if (window.emailjs) {
+                    resolve(window.emailjs);
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                script.async = true;
+                
+                script.onload = () => {
+                    try {
+                        window.emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+                        console.log('✅ EmailJS inicializado correctamente');
+                        resolve(window.emailjs);
+                    } catch (error) {
+                        console.error('❌ Error al inicializar EmailJS:', error);
+                        reject(error);
+                    }
+                };
+                
+                script.onerror = () => {
+                    reject(new Error('No se pudo cargar EmailJS SDK'));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+
+        // Form submission handler
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            if (!submitBtn) {
+                console.error('❌ No se encontró el botón de envío');
+                return;
+            }
+            
+            const originalText = submitBtn.textContent;
+            
+            try {
+                // Show loading state
+                submitBtn.textContent = '📤 Enviando...';
+                submitBtn.disabled = true;
+                
+                // Load EmailJS
+                await loadEmailJSSDK();
+                
+                // Get form data
+                const form = event.target;
+                const formData = new FormData(form);
+                
+                // Validate required fields
+                const nombre = formData.get('nombre');
+                const email = formData.get('email');
+                
+                if (!nombre || !email) {
+                    showNotification('❌ Por favor completa el nombre y email', 'error');
+                    return;
+                }
+                
+                // Prepare email parameters
+                const params = {
+                    nombre: nombre,
+                    email: email,
+                    mensaje: formData.get('mensaje') || 'Sin mensaje',
+                    to_email: 'gael.madrid.2009@gmail.com',
+                    submission_date: new Date().toLocaleString('es-MX'),
+                    form_type: 'PRUEBA SIMPLE',
+                    year: new Date().getFullYear()
+                };
+                
+                console.log('📨 Enviando prueba simple...', params);
+                
+                // Send email
+                const result = await window.emailjs.send(
+                    EMAILJS_CONFIG.SERVICE_ID,
+                    EMAILJS_CONFIG.TEMPLATE_ID,
+                    params
+                );
+                
+                console.log('✅ Email enviado exitosamente:', result);
+                showNotification('🎉 ¡Prueba enviada exitosamente! Revisa gael.madrid.2009@gmail.com', 'success');
+                
+                // Reset form
+                if (form && typeof form.reset === 'function') {
+                    form.reset();
+                }
+                
+            } catch (error) {
+                console.error('❌ Error al enviar email:', error);
+                let errorMessage = 'No se pudo enviar el email';
+                
+                if (error && typeof error === 'object') {
+                    if ('message' in error) {
+                        errorMessage = error.message;
+                    } else if ('text' in error) {
+                        errorMessage = error.text;
+                    }
+                }
+                
+                showNotification(`❌ Error: ${errorMessage}`, 'error');
+            } finally {
+                // Reset button
+                if (submitBtn) {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form submission
+            const form = document.getElementById('simple-form');
+            if (form) {
+                form.addEventListener('submit', handleFormSubmit);
+            }
+            
+            showNotification('✅ Prueba simple lista. Completa el formulario y envía.', 'info');
+        });
+
+        // Make test function available globally
+        window.testSimple = function() {
+            console.log('🧪 Ejecutando prueba simple...');
+            const form = document.getElementById('simple-form');
+            if (form) {
+                form.dispatchEvent(new Event('submit'));
+            }
+        };
+    </script>
+</body>
+</html>

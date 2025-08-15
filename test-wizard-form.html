@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Formulario Wizard - EmailJS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #002366;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #002366;
+        }
+        .btn {
+            background: linear-gradient(135deg, #002366 0%, #003d82 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: linear-gradient(135deg, #003d82 0%, #002366 100%);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .notification-success {
+            background: #10b981;
+        }
+        .notification-error {
+            background: #ef4444;
+        }
+        .notification-info {
+            background: #3b82f6;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Prueba Formulario Wizard - EmailJS</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Formulario de prueba para verificar la integración con EmailJS
+        </p>
+
+        <form id="wizard-test-form">
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="rfc">RFC *</label>
+                    <input type="text" id="rfc" name="rfc" placeholder="XAXX010101000" required>
+                </div>
+                <div class="form-group">
+                    <label for="razon_social">Razón Social *</label>
+                    <input type="text" id="razon_social" name="razon_social" placeholder="Empresa S.A. de C.V." required>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="telefono">Teléfono *</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="(667) 123-4567" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico *</label>
+                    <input type="email" id="correo" name="correo" placeholder="correo@empresa.com" required>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="cp_riesgo">Código Postal *</label>
+                    <input type="text" id="cp_riesgo" name="cp_riesgo" placeholder="80000" required>
+                </div>
+                <div class="form-group">
+                    <label for="calle_riesgo">Calle *</label>
+                    <input type="text" id="calle_riesgo" name="calle_riesgo" placeholder="Av. Principal" required>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="numero_riesgo">Número *</label>
+                    <input type="text" id="numero_riesgo" name="numero_riesgo" placeholder="123" required>
+                </div>
+                <div class="form-group">
+                    <label for="colonia_riesgo">Colonia *</label>
+                    <input type="text" id="colonia_riesgo" name="colonia_riesgo" placeholder="Centro" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="referencias">Referencias</label>
+                <input type="text" id="referencias" name="referencias" placeholder="Entre calles...">
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="anio_construccion">Año de Construcción *</label>
+                    <input type="number" id="anio_construccion" name="anio_construccion" placeholder="2020" min="1900" max="2030" required>
+                </div>
+                <div class="form-group">
+                    <label for="niveles">Niveles *</label>
+                    <select id="niveles" name="niveles" required>
+                        <option value="">Selecciona...</option>
+                        <option value="1">1 Nivel</option>
+                        <option value="2">2 Niveles</option>
+                        <option value="3">3 Niveles</option>
+                        <option value="4+">4+ Niveles</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="uso_inmueble">Uso del Inmueble *</label>
+                    <select id="uso_inmueble" name="uso_inmueble" required>
+                        <option value="">Selecciona...</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Oficinas">Oficinas</option>
+                        <option value="Almacén">Almacén</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tipo_construccion">Tipo de Construcción *</label>
+                    <select id="tipo_construccion" name="tipo_construccion" required>
+                        <option value="">Selecciona...</option>
+                        <option value="A">Tipo A (Excelente)</option>
+                        <option value="B">Tipo B (Buena)</option>
+                        <option value="C">Tipo C (Regular)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="suma_edificio">Suma Asegurada Edificio *</label>
+                    <input type="number" id="suma_edificio" name="suma_edificio" placeholder="1000000" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="suma_contenidos">Suma Asegurada Contenidos *</label>
+                    <input type="number" id="suma_contenidos" name="suma_contenidos" placeholder="500000" min="0" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nombre_asegurado">Nombre del Asegurado *</label>
+                <input type="text" id="nombre_asegurado" name="nombre_asegurado" placeholder="Juan Pérez" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha_firma">Fecha de Solicitud</label>
+                <input type="date" id="fecha_firma" name="fecha_firma">
+            </div>
+
+            <button type="submit" class="btn" id="submit-btn">
+                🚀 Enviar Solicitud de Prueba
+            </button>
+        </form>
+
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <h3>📋 Instrucciones de Prueba:</h3>
+            <ol>
+                <li>Completa todos los campos marcados con *</li>
+                <li>Haz clic en "Enviar Solicitud de Prueba"</li>
+                <li>Verifica la notificación de éxito</li>
+                <li>Revisa tu email en gael.madrid.2009@gmail.com</li>
+                <li>El email debe contener todos los datos del formulario</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // EmailJS Configuration
+        const EMAILJS_CONFIG = {
+            PUBLIC_KEY: '9uhWKUO7vI9o1xXgK',
+            SERVICE_ID: 'service_6gnqp8y',
+            TEMPLATE_ID: 'template_2yre1uf'
+        };
+
+        // Notification System
+        function showNotification(message, type = 'info', duration = 6000) {
+            const container = document.getElementById('notification-container') || createNotificationContainer();
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, duration);
+        }
+
+        function createNotificationContainer() {
+            const container = document.createElement('div');
+            container.id = 'notification-container';
+            container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+            document.body.appendChild(container);
+            return container;
+        }
+
+        // Load EmailJS SDK
+        function loadEmailJSSDK() {
+            return new Promise((resolve, reject) => {
+                if (window.emailjs) {
+                    resolve(window.emailjs);
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                script.async = true;
+                
+                script.onload = () => {
+                    try {
+                        window.emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+                        console.log('✅ EmailJS inicializado correctamente');
+                        resolve(window.emailjs);
+                    } catch (error) {
+                        console.error('❌ Error al inicializar EmailJS:', error);
+                        reject(error);
+                    }
+                };
+                
+                script.onerror = () => {
+                    reject(new Error('No se pudo cargar EmailJS SDK'));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+
+        // Form submission handler
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            if (!submitBtn) {
+                console.error('❌ No se encontró el botón de envío');
+                return;
+            }
+            
+            const originalText = submitBtn.textContent;
+            
+            try {
+                // Show loading state
+                submitBtn.textContent = '📤 Enviando...';
+                submitBtn.disabled = true;
+                
+                // Load EmailJS
+                await loadEmailJSSDK();
+                
+                // Get form data
+                const form = event.target;
+                const formData = new FormData(form);
+                
+                // Validate required fields
+                const requiredFields = ['rfc', 'razon_social', 'telefono', 'correo', 'cp_riesgo', 'calle_riesgo', 'numero_riesgo', 'colonia_riesgo', 'anio_construccion', 'niveles', 'uso_inmueble', 'tipo_construccion', 'suma_edificio', 'suma_contenidos', 'nombre_asegurado'];
+                const missingFields = [];
+                
+                requiredFields.forEach(field => {
+                    const value = formData.get(field);
+                    if (!value || value.toString().trim() === '') {
+                        missingFields.push(field);
+                    }
+                });
+                
+                if (missingFields.length > 0) {
+                    showNotification(`❌ Por favor completa los campos: ${missingFields.join(', ')}`, 'error');
+                    return;
+                }
+                
+                // Prepare email parameters
+                const params = {
+                    // Datos Fiscales
+                    rfc: formData.get('rfc'),
+                    razon_social: formData.get('razon_social'),
+                    telefono: formData.get('telefono'),
+                    correo: formData.get('correo'),
+
+                    // Ubicación de Riesgo
+                    cp_riesgo: formData.get('cp_riesgo'),
+                    calle_riesgo: formData.get('calle_riesgo'),
+                    numero_riesgo: formData.get('numero_riesgo'),
+                    colonia_riesgo: formData.get('colonia_riesgo'),
+                    referencias: formData.get('referencias') || 'Sin referencias',
+
+                    // Características Constructivas
+                    anio_construccion: formData.get('anio_construccion'),
+                    niveles: formData.get('niveles'),
+                    uso_inmueble: formData.get('uso_inmueble'),
+                    tipo_construccion: formData.get('tipo_construccion'),
+
+                    // Coberturas
+                    suma_edificio: formData.get('suma_edificio'),
+                    suma_contenidos: formData.get('suma_contenidos'),
+                    cobertura_extra: 'Prueba de formulario',
+
+                    // Datos finales
+                    nombre_asegurado: formData.get('nombre_asegurado'),
+                    fecha_firma: formData.get('fecha_firma') || new Date().toISOString().split('T')[0],
+
+                    // Adjuntos
+                    documentos_links: 'Sin documentos adjuntos (prueba)',
+
+                    // Año actual
+                    year: new Date().getFullYear(),
+                };
+                
+                console.log('📨 Enviando formulario wizard de prueba...', params);
+                
+                // Send email
+                const result = await window.emailjs.send(
+                    EMAILJS_CONFIG.SERVICE_ID,
+                    EMAILJS_CONFIG.TEMPLATE_ID,
+                    params
+                );
+                
+                console.log('✅ Email enviado exitosamente:', result);
+                showNotification('🎉 ¡Formulario enviado exitosamente! Revisa gael.madrid.2009@gmail.com', 'success');
+                
+                // Reset form
+                if (form && typeof form.reset === 'function') {
+                    form.reset();
+                }
+                
+            } catch (error) {
+                console.error('❌ Error al enviar email:', error);
+                let errorMessage = 'No se pudo enviar el email';
+                
+                if (error && typeof error === 'object') {
+                    if ('message' in error) {
+                        errorMessage = error.message;
+                    } else if ('text' in error) {
+                        errorMessage = error.text;
+                    }
+                }
+                
+                showNotification(`❌ Error: ${errorMessage}`, 'error');
+            } finally {
+                // Reset button
+                if (submitBtn) {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date
+            const today = new Date().toISOString().split('T')[0];
+            const fechaInput = document.getElementById('fecha_firma');
+            if (fechaInput) fechaInput.value = today;
+            
+            // Form submission
+            const form = document.getElementById('wizard-test-form');
+            if (form) {
+                form.addEventListener('submit', handleFormSubmit);
+            }
+            
+            showNotification('✅ Formulario wizard de prueba listo. Completa los campos y envía.', 'info');
+        });
+
+        // Make test function available globally
+        window.testWizardForm = function() {
+            console.log('🧪 Ejecutando prueba del formulario wizard...');
+            const form = document.getElementById('wizard-test-form');
+            if (form) {
+                form.dispatchEvent(new Event('submit'));
+            }
+        };
+    </script>
+</body>
+</html>

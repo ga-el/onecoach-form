@@ -1,0 +1,4037 @@
+---
+// Import MultipleEmpresarial component
+import MultipleEmpresarial from '../components/forms/MultipleEmpresarial.astro';
+
+// Page configuration
+const pageTitle = 'MULTIPLE EMPRESARIAL';
+const pageDescription = 'Formulario inteligente de solicitud';
+
+// Get current year for footer
+const currentYear = new Date().getFullYear();
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription}>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: linear-gradient(135deg, #002366 0%, #003d82 100%);
+            --primary-solid: #002366;
+            --primary-light: #f0f4ff;
+            --primary-accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --background-card: rgba(255, 255, 255, 0.9);
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --border-focus: #3b82f6;
+            --shadow: 0 4px 20px rgba(0, 35, 102, 0.1);
+            --shadow-hover: 0 8px 35px rgba(0, 35, 102, 0.15);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        /* Dark Theme Variables */
+        body.dark-theme {
+            --primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            --primary-solid: #1e40af;
+            --primary-light: rgba(59, 130, 246, 0.1);
+            --primary-accent: #60a5fa;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --background-card: rgba(30, 41, 59, 0.9);
+            --text: #f1f5f9;
+            --text-light: #94a3b8;
+            --border: #374151;
+            --border-focus: #60a5fa;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 8px 35px rgba(0, 0, 0, 0.4);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Hero Header */
+        .hero-header {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" fill="rgba(255,255,255,0.1)"><path d="M0,50 Q250,0 500,50 T1000,50 L1000,200 L0,200 Z"/></svg>');
+            background-size: cover;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+            animation: slideInUp 0.8s ease-out;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+        
+        .progress-container {
+            max-width: 600px;
+            margin: 0 auto;
+            animation: slideInUp 0.8s ease-out 0.4s both;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            width: 5%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        /* Main Container */
+        .main-container {
+            max-width: 1000px;
+            margin: -1rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Form Wizard */
+        .form-wizard {
+            background: var(--background-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: slideInUp 0.8s ease-out 0.6s both;
+        }
+        
+        .wizard-nav {
+            display: flex;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .wizard-nav::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-step {
+            flex: 1;
+            min-width: 120px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border-right: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .nav-step:last-child {
+            border-right: none;
+        }
+        
+        .nav-step.active {
+            background: var(--primary-light);
+            color: var(--primary-solid);
+        }
+        
+        .nav-step.completed {
+            background: #dcfce7;
+            color: var(--success);
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .nav-step.active .step-number {
+            background: var(--primary-solid);
+            color: white;
+        }
+        
+        .nav-step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+        
+        .step-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        /* Form Step */
+        .form-step {
+            padding: 3rem;
+            display: none;
+            animation: fadeInRight 0.5s ease-out;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .step-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .step-title-main {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-description {
+            color: var(--text-light);
+            font-size: 1.125rem;
+        }
+        
+        /* Smart Form Groups */
+        .smart-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .grid-1 { grid-template-columns: 1fr; }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        }
+        
+        .field-group {
+            position: relative;
+        }
+        
+        .field-label {
+            display: block;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .required {
+            color: var(--error);
+        }
+        
+        /* Enhanced Inputs */
+        .smart-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+        
+        .smart-input:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .smart-input:valid {
+            border-color: var(--success);
+        }
+        
+        /* Smart Select */
+        .smart-select {
+            position: relative;
+        }
+        
+        .smart-select select {
+            appearance: none;
+            background: white url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23002366"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 1rem center;
+            background-size: 20px;
+            cursor: pointer;
+        }
+        
+        /* Checkbox and Radio Groups */
+        .option-group {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .option-item:hover {
+            border-color: var(--border-focus);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-item input[type="checkbox"],
+        .option-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 0.75rem;
+            accent-color: var(--primary-solid);
+        }
+        
+        .option-item.checked {
+            border-color: var(--primary-solid);
+            background: var(--primary-light);
+        }
+        
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            background: #fafafa;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--border-focus);
+            background: var(--primary-light);
+        }
+        
+        .file-upload.dragover {
+            border-color: var(--primary-solid);
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-hint {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+        
+        /* Navigation Buttons */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Auto-complete and suggestions */
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 var(--radius) var(--radius);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+        
+        .suggestion-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .suggestion-item:hover {
+            background: var(--primary-light);
+        }
+        
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0, -8px, 0);
+            }
+            70% {
+                transform: translate3d(0, -4px, 0);
+            }
+            90% {
+                transform: translate3d(0, -2px, 0);
+            }
+        }
+        
+        /* Smart tips */
+        .smart-tip {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #93c5fd;
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .tip-icon {
+            color: var(--primary-solid);
+        }
+        
+        /* Final Submit Section */
+        .submit-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #86efac;
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .submit-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+        
+        .submit-description {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+            padding: 1.25rem 3rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .form-step {
+                padding: 2rem 1.5rem;
+            }
+            
+            .step-title-main {
+                font-size: 1.5rem;
+            }
+            
+            .wizard-nav {
+                flex-wrap: wrap;
+            }
+            
+            .nav-step {
+                min-width: 100px;
+                padding: 1rem 0.5rem;
+            }
+        }
+        
+        /* Hide original form initially */
+        .original-form {
+            display: none;
+        }
+        
+        /* Mejoras visuales adicionales */
+        .nav-step.accessible {
+            cursor: pointer;
+        }
+        
+        .nav-step:not(.accessible) {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        .smart-input.loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Efectos de hover mejorados */
+        .option-item:hover {
+            border-color: var(--border-focus);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .option-item.checked {
+            border-color: var(--primary-solid);
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+		/* --- Añade esto dentro de tu etiqueta <style> --- */
+
+/* Estilo para el contenedor del campo con error */
+.field-group.has-error .smart-input {
+    border-color: var(--error);
+    background-color: #fff5f5; /* Un fondo rosado muy claro */
+    animation: shake 0.5s;
+}
+
+/* También cambia el color de la etiqueta para que coincida */
+.field-group.has-error .field-label {
+    color: var(--error);
+    font-weight: 600;
+}
+F
+body.dark-theme .field-group.has-error .smart-input {
+    background-color: rgba(239, 68, 68, 0.1); /* Fondo rojo oscuro transparente */
+}
+
+/* Animación de "temblor" para llamar la atención */
+@keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+}
+        
+        /* Indicadores visuales mejorados */
+        .field-group.completed::after {
+            content: '✓';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Animaciones de transición */
+        .form-step {
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        /* Mejoras para campos requeridos */
+        .smart-input[required]:focus {
+            border-left: 4px solid var(--primary-accent);
+        }
+        
+        .smart-input[required]:valid {
+            border-left: 4px solid var(--success);
+        }
+        
+        .smart-input[required]:invalid {
+            border-left: 4px solid var(--error);
+        }
+        
+        /* Dark mode toggle - MEJORADO */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--background-card);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            font-size: 1.2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-accent);
+        }
+        
+        /* Dark theme styles - COMPLETO */
+        body.dark-theme {
+            color: var(--text);
+            transition: var(--transition);
+        }
+        
+        body.dark-theme .smart-input {
+            background: rgba(30, 41, 59, 0.8);
+            color: var(--text);
+            border-color: var(--border);
+        }
+        
+        body.dark-theme .smart-input:focus {
+            background: rgba(30, 41, 59, 1);
+            border-color: var(--border-focus);
+        }
+        
+        body.dark-theme .option-item {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        
+        body.dark-theme .option-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        body.dark-theme .file-upload {
+            background: rgba(30, 41, 59, 0.5);
+            border-color: var(--border);
+            color: var(--text);
+        }
+        
+        body.dark-theme .file-upload:hover {
+            background: var(--primary-light);
+            border-color: var(--border-focus);
+        }
+        
+        body.dark-theme .wizard-nav {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+        }
+        
+        body.dark-theme .nav-step {
+            color: var(--text);
+        }
+        
+        body.dark-theme .nav-step:hover:not(.active) {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        body.dark-theme .hero-header {
+            background: var(--primary);
+        }
+        
+        body.dark-theme .submit-section {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        body.dark-theme .smart-tip {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        body.dark-theme .btn-secondary {
+            background: rgba(30, 41, 59, 0.9);
+            color: var(--text);
+            border-color: var(--border);
+        }
+        
+        body.dark-theme .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        body.dark-theme .field-label {
+            color: var(--text);
+        }
+        
+        body.dark-theme .step-description {
+            color: var(--text-light);
+        }
+        
+        /* Indicador de tiempo estimado */
+        .time-estimate {
+            position: absolute;
+            top: -30px;
+            right: 0;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary-solid);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .step-header {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con estilo Hero moderno -->
+    <!-- Tema toggle button -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema">
+        <span id="theme-icon">🌙</span>
+    </button>
+    
+    <header class="hero-header">
+        <div class="hero-content">
+            <h1 class="hero-title">{pageTitle}</h1>
+            <p class="hero-subtitle">{pageDescription}</p>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p class="progress-text"><span id="progress-percent">17</span>% completado - <span id="current-section-name">Información Básica</span></p>
+            </div>
+        </div>
+    </header>
+    
+    <main class="main-container">
+        <!-- Nueva interfaz con formato wizard -->
+        <div class="form-wizard">
+            <!-- Navegación superior del wizard -->
+            <nav class="wizard-nav">
+                <div class="nav-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Información Básica</div>
+                </div>
+                <div class="nav-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Ubicación de Riesgo</div>
+                </div>
+                <div class="nav-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Características</div>
+                </div>
+                <div class="nav-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Seguridad</div>
+                </div>
+                <div class="nav-step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Coberturas</div>
+                </div>
+                <div class="nav-step" data-step="6">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Finalizar</div>
+                </div>
+            </nav>
+            
+            <!-- PASO 1: Información Básica -->
+            <form id="wizard-form">
+                <div class="form-step active" id="step-1">
+                    <div class="step-header">
+                        <div class="time-estimate">⏱️ 2-3 min</div>
+                        <h2 class="step-title-main">Datos Fiscales del Cliente</h2>
+                        <p class="step-description">Información básica de la empresa y contacto</p>
+                    </div>
+                    
+                    <div class="smart-grid grid-2">
+                        <div class="field-group">
+                            <label class="field-label" for="rfc">RFC <span class="required">*</span></label>
+                            <input type="text" id="rfc" name="rfc" class="smart-input" placeholder="Ingrese el RFC" required>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="razon-social">Razón Social <span class="required">*</span></label>
+                            <input type="text" id="razon-social" name="razon_social" class="smart-input" placeholder="Ingrese la razón social" required>
+                        </div>
+                    </div>
+                    
+                    <div class="smart-grid grid-2">
+                        <div class="field-group">
+                            <label class="field-label" for="cp">Código Postal <span class="required">*</span></label>
+                            <input type="text" id="cp" name="cp" class="smart-input" placeholder="00000" pattern="[0-9]{5}" maxlength="5" required>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="estado">Estado</label>
+                            <div class="smart-select">
+                                <select id="estado" name="estado" class="smart-input">
+                                    <option value="">Autodetección por CP</option>
+                                    <option value="Ciudad de México">Ciudad de México</option>
+                                    <option value="Estado de México">Estado de México</option>
+                                    <option value="Jalisco">Jalisco</option>
+                                    <option value="Nuevo León">Nuevo León</option>
+                                    <option value="Sinaloa">Sinaloa</option>
+                                    <option value="Aguascalientes">Aguascalientes</option>
+                                    <option value="Baja California">Baja California</option>
+                                    <option value="Quintana Roo">Quintana Roo</option>
+                                    <option value="Guanajuato">Guanajuato</option>
+                                    <option value="San Luis Potosí">San Luis Potosí</option>
+                                    <option value="Chiapas">Chiapas</option>
+                                    <option value="Morelos">Morelos</option>
+                                    <option value="Veracruz">Veracruz</option>
+                                    <option value="Yucatán">Yucatán</option>
+                                    <option value="Chihuahua">Chihuahua</option>
+                                    <option value="Sonora">Sonora</option>
+                                    <option value="Coahuila">Coahuila</option>
+                                    <option value="Durango">Durango</option>
+                                    <option value="Tamaulipas">Tamaulipas</option>
+                                    <option value="Puebla">Puebla</option>
+                                    <option value="Hidalgo">Hidalgo</option>
+                                    <option value="Michoacán">Michoacán</option>
+                                    <option value="Oaxaca">Oaxaca</option>
+                                    <option value="Tabasco">Tabasco</option>
+                                    <option value="Campeche">Campeche</option>
+                                    <option value="Guerrero">Guerrero</option>
+                                    <option value="Tlaxcala">Tlaxcala</option>
+                                    <option value="Nayarit">Nayarit</option>
+                                    <option value="Colima">Colima</option>
+                                    <option value="Zacatecas">Zacatecas</option>
+                                    <option value="Querétaro">Querétaro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="smart-grid grid-2">
+                        <div class="field-group">
+                            <label class="field-label" for="telefono">Teléfono <span class="required">*</span></label>
+                            <input type="tel" id="telefono" name="telefono" class="smart-input" placeholder="(55) 1234-5678" required>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="correo">Correo Electrónico <span class="required">*</span></label>
+                            <input type="email" id="correo" name="correo" class="smart-input" placeholder="ejemplo@empresa.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="smart-tip">
+                        <span class="tip-icon">💡</span>
+                        <span>Al ingresar el código postal, autocompletaremos información como estado y municipio para acelerar el proceso.</span>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <div></div>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente <span>→</span></button>
+                    </div>
+                </div>
+                
+                <!-- PASO 2: Ubicación del Domicilio de Riesgo -->
+                <div class="form-step" id="step-2">
+                    <div class="step-header">
+                        <div class="time-estimate">⏱️ 1-2 min</div>
+                        <h2 class="step-title-main">Ubicación del Domicilio de Riesgo</h2>
+                        <p class="step-description">Especifica dónde se encuentra el inmueble a asegurar</p>
+                    </div>
+                    
+                    <div class="option-group">
+                        <div class="option-item" onclick="toggleOption(this, 'same-address')">
+                            <input type="checkbox" id="same-address" name="same_address">
+                            <label for="same-address">La ubicación de riesgo es la misma que la dirección fiscal</label>
+                        </div>
+                    </div>
+                    
+                    <div id="risk-address-fields" class="smart-grid grid-2">
+                        <div class="field-group">
+                            <label class="field-label" for="cp-riesgo">Código Postal <span class="required">*</span></label>
+                            <input type="text" id="cp-riesgo" name="cp_riesgo" class="smart-input" placeholder="00000" pattern="[0-9]{5}" maxlength="5">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="calle-riesgo">Calle <span class="required">*</span></label>
+                            <input type="text" id="calle-riesgo" name="calle_riesgo" class="smart-input" placeholder="Nombre de la calle">
+                        </div>
+                        
+                        <div class="field-group">
+                            <label class="field-label" for="numero-riesgo">Número <span class="required">*</span></label>
+                            <input type="text" id="numero-riesgo" name="numero_riesgo" class="smart-input" placeholder="Número exterior">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="colonia-riesgo">Colonia</label>
+                            <input type="text" id="colonia-riesgo" name="colonia_riesgo" class="smart-input" placeholder="Nombre de la colonia">
+                        </div>
+                        
+                        <div class="field-group">
+                            <label class="field-label" for="entre-calles">Entre Calles</label>
+                            <input type="text" id="entre-calles" name="entre_calles" class="smart-input" placeholder="Entre qué calles se encuentra">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="referencias">Referencias</label>
+                            <input type="text" id="referencias" name="referencias" class="smart-input" placeholder="Referencias adicionales">
+                        </div>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()"><span>←</span> Anterior</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente <span>→</span></button>
+                    </div>
+                </div>
+                
+                <!-- PASO 3: Características del Edificio -->
+                <div class="form-step" id="step-3">
+                    <div class="step-header">
+                        <div class="time-estimate">⏱️ 3-4 min</div>
+                        <h2 class="step-title-main">Características Constructivas</h2>
+                        <p class="step-description">Información sobre la construcción y medidas básicas de seguridad</p>
+                    </div>
+                    
+                    <div class="smart-grid grid-3">
+                        <div class="field-group">
+                            <label class="field-label">Año de Construcción <span class="required">*</span></label>
+                            <input type="number" id="anio-construccion" name="anio_construccion" class="smart-input" placeholder="2020" min="1900" max="2025">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Número de Niveles</label>
+                            <input type="number" id="niveles" name="niveles" class="smart-input" placeholder="1" min="1" max="50">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Uso del Inmueble <span class="required">*</span></label>
+                            <div class="smart-select">
+                                <select id="uso-inmueble" name="uso_inmueble" class="smart-input">
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="Comercial">Comercial</option>
+                                    <option value="Industrial">Industrial</option>
+                                    <option value="Oficinas">Oficinas</option>
+                                    <option value="Residencial">Residencial</option>
+                                    <option value="Almacén">Almacén</option>
+                                    <option value="Mixto">Mixto</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="smart-grid grid-2">
+                        <div class="field-group">
+                            <label class="field-label">Superficie del Terreno (m²)</label>
+                            <input type="number" id="superficie-terreno" name="superficie_terreno" class="smart-input" placeholder="0.00" step="0.01">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Superficie Construida (m²)</label>
+                            <input type="number" id="superficie-construida" name="superficie_construida" class="smart-input" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <label class="field-label">Tipo de Construcción <span class="required">*</span></label>
+                        <div class="option-group">
+                            <div class="option-item" onclick="selectRadio(this, 'tipo_construccion', 'A')">
+                                <input type="radio" id="tipo-a" name="tipo_construccion" value="A">
+                                <div>
+                                    <strong>Tipo A</strong><br>
+                                    <small>Estructura de concreto, muros de tabique, techos de concreto</small>
+                                </div>
+                            </div>
+                            <div class="option-item" onclick="selectRadio(this, 'tipo_construccion', 'B')">
+                                <input type="radio" id="tipo-b" name="tipo_construccion" value="B">
+                                <div>
+                                    <strong>Tipo B</strong><br>
+                                    <small>Estructura de acero, muros de tabique, techos de lámina</small>
+                                </div>
+                            </div>
+                            <div class="option-item" onclick="selectRadio(this, 'tipo_construccion', 'C')">
+                                <input type="radio" id="tipo-c" name="tipo_construccion" value="C">
+                                <div>
+                                    <strong>Tipo C</strong><br>
+                                    <small>Estructura de madera, muros de madera, techos de madera</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()"><span>←</span> Anterior</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente <span>→</span></button>
+                    </div>
+                </div>
+                
+                <!-- PASO 4: Medidas de Seguridad -->
+                <div class="form-step" id="step-4">
+                    <div class="step-header">
+                        <div class="time-estimate">⏱️ 2-3 min</div>
+                        <h2 class="step-title-main">Medidas de Seguridad</h2>
+                        <p class="step-description">Selecciona las medidas de seguridad con las que cuenta el inmueble</p>
+                    </div>
+                    
+                    <div class="field-group">
+                        <label class="field-label">Sistemas de Seguridad contra Incendio</label>
+                        <div class="option-group">
+                            <div class="option-item" onclick="toggleOption(this, 'sistema_extintores')">
+                                <input type="checkbox" id="sistema_extintores" name="sistema_extintores" value="Sí">
+                                <div>
+                                    <strong>Sistema de Extintores</strong><br>
+                                    <small>Equipos portátiles contra incendios</small>
+                                </div>
+                            </div>
+                            <div class="option-item" onclick="toggleOption(this, 'sistema_hidrantes')">
+                                <input type="checkbox" id="sistema_hidrantes" name="sistema_hidrantes" value="Sí">
+                                <div>
+                                    <strong>Sistema de Hidrantes</strong><br>
+                                    <small>Red fija de agua contra incendios</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <label class="field-label">Sistemas de Alarma y Detección</label>
+                        <div class="option-group">
+                            <div class="option-item" onclick="toggleOption(this, 'alarma_robo')">
+                                <input type="checkbox" id="alarma_robo" name="alarma_robo" value="Sí">
+                                <div>
+                                    <strong>Alarma de Robo</strong><br>
+                                    <small>Sistema de detección de intrusos</small>
+                                </div>
+                            </div>
+                            <div class="option-item" onclick="toggleOption(this, 'alarma_incendio')">
+                                <input type="checkbox" id="alarma_incendio" name="alarma_incendio" value="Sí">
+                                <div>
+                                    <strong>Alarma de Incendio</strong><br>
+                                    <small>Sistema de detección de humo/fuego</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <label class="field-label">Medidas de Seguridad Física</label>
+                        <div class="option-group">
+                            <div class="option-item" onclick="toggleOption(this, 'vigilancia')">
+                                <input type="checkbox" id="vigilancia" name="vigilancia" value="Sí">
+                                <div>
+                                    <strong>Vigilancia</strong><br>
+                                    <small>Servicio de seguridad privada</small>
+                                </div>
+                            </div>
+                            <div class="option-item" onclick="toggleOption(this, 'cercado')">
+                                <input type="checkbox" id="cercado" name="cercado" value="Sí">
+                                <div>
+                                    <strong>Cercado Perimetral</strong><br>
+                                    <small>Bardas, rejas o muros perimetrales</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()"><span>←</span> Anterior</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente <span>→</span></button>
+                    </div>
+                </div>
+                
+                <!-- PASO 5: Coberturas -->
+                <div class="form-step" id="step-5">
+                    <div class="step-header">
+                        <div class="time-estimate">⏱️ 2-3 min</div>
+                        <h2 class="step-title-main">Coberturas de Seguro</h2>
+                        <p class="step-description">Configura las coberturas y montos asegurados</p>
+                    </div>
+                    
+                    <div class="smart-grid grid-2">
+                        <div class="field-group">
+                            <label class="field-label">Suma Asegurada - Edificio</label>
+                            <input type="text" id="suma_edificio" name="suma_edificio" class="smart-input" placeholder="$0.00">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Suma Asegurada - Contenidos</label>
+                            <input type="text" id="suma_contenidos" name="suma_contenidos" class="smart-input" placeholder="$0.00">
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <label class="field-label">Coberturas Adicionales</label>
+                        <div class="option-group">
+                            <div class="option-item" onclick="toggleOption(this, 'cobertura_explosion')">
+                                <input type="checkbox" id="cobertura_explosion" name="cobertura_explosion" value="Sí">
+                                <div><strong>Explosión</strong></div>
+                            </div>
+                            <div class="option-item" onclick="toggleOption(this, 'cobertura_huelgas')">
+                                <input type="checkbox" id="cobertura_huelgas" name="cobertura_huelgas" value="Sí">
+                                <div><strong>Huelgas y Vandalismo</strong></div>
+                            </div>
+                            <div class="option-item" onclick="toggleOption(this, 'cobertura_terremoto')">
+                                <input type="checkbox" id="cobertura_terremoto" name="cobertura_terremoto" value="Sí">
+                                <div><strong>Terremoto y Erupción Volcánica</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()"><span>←</span> Anterior</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Finalizar <span>→</span></button>
+                    </div>
+                </div>
+                
+                <!-- PASO 6: Finalizar -->
+                <div class="form-step" id="step-6">
+                    <div class="submit-section">
+                        <div class="time-estimate">⏱️ 1 min</div>
+                        <h2 class="submit-title">¡Formulario Completado! 🎉</h2>
+                        <p class="submit-description">Revisa la información y envía tu solicitud de seguro empresarial.</p>
+                        
+                        <div class="smart-grid grid-2">
+                            <div class="field-group">
+                                <label class="field-label">Nombre del Asegurado <span class="required">*</span></label>
+                                <input type="text" id="nombre_asegurado" name="nombre_asegurado" class="smart-input" placeholder="Nombre completo" required>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label">Fecha de Solicitud</label>
+                                <input type="date" id="fecha_firma" name="fecha_firma" class="smart-input">
+                            </div>
+                        </div>
+                        
+                        <div class="file-upload" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
+                            <div class="upload-icon">📁</div>
+                            <div class="upload-text">Subir Documentos Adicionales</div>
+                            <div class="upload-hint">Arrastra archivos aquí o haz clic para seleccionar</div>
+                            <input type="file" id="documentos" name="documentos" multiple style="display: none;">
+                        </div>
+                        
+                        <button type="button" class="btn btn-submit" onclick="submitForm()">Enviar Solicitud</button>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()"><span>←</span> Anterior</button>
+                        <div></div>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Ocultar el componente original para reemplazarlo por el nuevo diseño -->
+            <div class="original-form">
+                <MultipleEmpresarial />
+            
+            <!-- Datos Fiscales del Cliente -->
+            <div class="form-section">
+                <h2 class="section-title">DATOS FISCALES DEL CLIENTE</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rfc-old">RFC:</label>
+                        <input type="text" id="rfc-old" name="rfc" class="form-input" placeholder="Ingrese el RFC">
+                    </div>
+                    <div class="form-group">
+                        <label for="razon-social-old">RAZÓN SOCIAL:</label>
+                        <input type="text" id="razon-social-old" name="razon_social" class="form-input" placeholder="Ingrese la razón social">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cp-old">C.P.:</label>
+                        <input type="text" id="cp-old" name="cp" class="form-input" placeholder="Código Postal">
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">ESTADO:</label>
+                        <input type="text" id="estado" name="estado" class="form-input" placeholder="Estado">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="municipio">MUNICIPIO O ALCALDÍA:</label>
+                        <input type="text" id="municipio" name="municipio" class="form-input" placeholder="Municipio o Alcaldía">
+                    </div>
+                    <div class="form-group">
+                        <label for="colonia">COLONIA:</label>
+                        <input type="text" id="colonia" name="colonia" class="form-input" placeholder="Colonia">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="calle">CALLE:</label>
+                        <input type="text" id="calle" name="calle" class="form-input" placeholder="Calle">
+                    </div>
+                    <div class="form-group">
+                        <label for="numero">NÚMERO:</label>
+                        <input type="text" id="numero" name="numero" class="form-input" placeholder="Número">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefono">TELÉFONO:</label>
+                        <input type="tel" id="telefono" name="telefono" class="form-input" placeholder="Teléfono">
+                    </div>
+                    <div class="form-group">
+                        <label for="correo">CORREO ELECTRÓNICO:</label>
+                        <input type="email" id="correo" name="correo" class="form-input" placeholder="Correo electrónico">
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Datos Fiscales del Cliente -->
+
+            <!-- Ubicación del Domicilio de Riesgo -->
+            <div class="form-section">
+                <h2 class="section-title">UBICACIÓN DEL DOMICILIO DE RIESGO</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="calle-riesgo">CALLE:</label>
+                        <input type="text" id="calle-riesgo" name="calle_riesgo" class="form-input" placeholder="Calle">
+                    </div>
+                    <div class="form-group">
+                        <label for="numero-riesgo">NÚMERO:</label>
+                        <input type="text" id="numero-riesgo" name="numero_riesgo" class="form-input" placeholder="Número">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="colonia-riesgo">COLONIA:</label>
+                        <input type="text" id="colonia-riesgo" name="colonia_riesgo" class="form-input" placeholder="Colonia">
+                    </div>
+                    <div class="form-group">
+                        <label for="cp-riesgo">C.P.:</label>
+                        <input type="text" id="cp-riesgo" name="cp_riesgo" class="form-input" placeholder="Código Postal">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="municipio-riesgo">MUNICIPIO O ALCALDÍA:</label>
+                        <input type="text" id="municipio-riesgo" name="municipio_riesgo" class="form-input" placeholder="Municipio o Alcaldía">
+                    </div>
+                    <div class="form-group">
+                        <label for="estado-riesgo">ESTADO:</label>
+                        <input type="text" id="estado-riesgo" name="estado_riesgo" class="form-input" placeholder="Estado">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="entre-calles">ENTRE CALLES:</label>
+                        <input type="text" id="entre-calles" name="entre_calles" class="form-input" placeholder="Entre calles">
+                    </div>
+                    <div class="form-group">
+                        <label for="referencias">REFERENCIAS:</label>
+                        <input type="text" id="referencias" name="referencias" class="form-input" placeholder="Referencias">
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Ubicación del Domicilio de Riesgo -->
+
+            <!-- Características Constructivas del Edificio y Medidas de Seguridad -->
+            <div class="form-section">
+                <h2 class="section-title">CARACTERISTICAS CONSTRUCTIVAS DEL EDIFICIO Y MEDIDAS DE SEGURIDAD</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>TIPO DE CONSTRUCCIÓN:</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="tipo_construccion" value="A"> A
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="tipo_construccion" value="B"> B
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="tipo_construccion" value="C"> C
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="tipo_construccion" value="D"> D
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="anio-construccion">AÑO DE CONSTRUCCIÓN:</label>
+                        <input type="number" id="anio-construccion" name="anio_construccion" class="form-input" placeholder="Año de construcción" min="1900" max="2025">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="superficie-terreno">SUPERFICIE DEL TERRENO (m2):</label>
+                        <input type="number" id="superficie-terreno" name="superficie_terreno" class="form-input" placeholder="m²" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="superficie-construida">SUPERFICIE CONSTRUIDA (m2):</label>
+                        <input type="number" id="superficie-construida" name="superficie_construida" class="form-input" placeholder="m²" step="0.01">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="niveles">NIVELES:</label>
+                        <input type="number" id="niveles" name="niveles" class="form-input" placeholder="Número de niveles" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>USO DEL INMUEBLE:</label>
+                        <select id="uso-inmueble" name="uso_inmueble" class="form-input">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Comercial">Comercial</option>
+                            <option value="Industrial">Industrial</option>
+                            <option value="Oficinas">Oficinas</option>
+                            <option value="Residencial">Residencial</option>
+                            <option value="Almacén">Almacén</option>
+                            <option value="Mixto">Mixto</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sistema_extintores" value="Sí">
+                            SISTEMA DE EXTINTORES
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sistema_hidrantes" value="Sí">
+                            SISTEMA DE HIDRANTES
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="alarma_robo" value="Sí">
+                            ALARMA DE ROBO
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="alarma_incendio" value="Sí">
+                            ALARMA DE INCENDIO
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="vigilancia" value="Sí">
+                            VIGILANCIA
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="cercado" value="Sí">
+                            CERCADO
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Características Constructivas del Edificio y Medidas de Seguridad -->
+
+            <!-- Medidas de Seguridad Contra Robo -->
+            <div class="form-section">
+                <h2 class="section-title">MEDIDAS DE SEGURIDAD CONTRA ROBO</h2>
+                
+                <!-- Medidas de Seguridad Básicas -->
+                <div class="form-subsection">
+                    <h3 class="subsection-title">1. Medidas de Seguridad Básicas</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="alarma_local" value="Sí">
+                                ALARMA LOCAL
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="alarma_central" value="Sí">
+                                ALARMA CENTRAL
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="domos_patios" value="Sí">
+                                DOMOS Y/O PATIOS
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Elementos de Seguridad Física -->
+                <div class="form-subsection">
+                    <h3 class="subsection-title">2. Elementos de Seguridad Física</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="caja_fuerte" value="Sí">
+                                CAJA FUERTE O BOVEDA
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="circuito_tv" value="Sí">
+                                CIRCUITO CDO. DE T.V.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exclusiones -->
+                <div class="form-subsection">
+                    <h3 class="subsection-title">3. Exclusiones</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="exclusiones">EXCLUSIONES:</label>
+                            <input type="text" id="exclusiones" name="exclusiones" class="form-input" placeholder="Especifique exclusiones">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vigilancia -->
+                <div class="form-subsection">
+                    <h3 class="subsection-title">4. Vigilancia</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="vigilancia_24hrs" value="Sí">
+                                24 HRS
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="vigilancia_armada" value="Sí">
+                                ARMADA
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rondines" value="Sí">
+                                RONDINES
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_vigilancia">TIPO:</label>
+                            <input type="text" id="tipo_vigilancia" name="tipo_vigilancia" class="form-input" placeholder="Especifique tipo">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Puertas y Ventanas Protegidas -->
+                <div class="form-subsection">
+                    <h3 class="subsection-title">5. Puertas y Ventanas Protegidas</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="puertas_ventanas_protegidas" value="Sí">
+                                PUERTAS Y VENTANAS CON PROTECCIÓN
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tipo_proteccion">TIPO:</label>
+                            <input type="text" id="tipo_proteccion" name="tipo_proteccion" class="form-input" placeholder="Especifique tipo de protección">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recolección de Dinero -->
+                <div class="form-subsection">
+                    <h3 class="subsection-title">6. Recolección de Dinero</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="recoleccion_dinero" value="Sí">
+                                RECOLECCIÓN DE DINERO
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="colindantes_sin_fincar" value="Sí">
+                                COLINDANTES SIN FINCAR
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tipo_recoleccion">TIPO:</label>
+                            <input type="text" id="tipo_recoleccion" name="tipo_recoleccion" class="form-input" placeholder="Especifique tipo de recolección">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Depósitos Bancarios -->
+                <div class="form-subsection">
+                    <h3 class="subsection-title">7. Depósitos Bancarios</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="depositos_bancarios" value="Sí">
+                                DEPÓSITOS BANCARIOS
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="frecuencia_depositos">FRECUENCIA:</label>
+                            <select id="frecuencia_depositos" name="frecuencia_depositos" class="form-input">
+                                <option value="">Seleccione frecuencia</option>
+                                <option value="Diario">Diario</option>
+                                <option value="Semanal">Semanal</option>
+                                <option value="Quincenal">Quincenal</option>
+                                <option value="Mensual">Mensual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="otra_informacion">OTRA (ESPECIFICAR):</label>
+                            <input type="text" id="otra_informacion" name="otra_informacion" class="form-input" placeholder="Especifique">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subida de Documentos -->
+                <div class="form-subsection">
+                    <h3 class="subsection-title">8. Subida de Documentos</h3>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <p class="form-note">En caso de varias ubicaciones anexar relación por separado</p>
+                            <div class="file-upload">
+                                <input type="file" id="documentos" name="documentos" class="file-input" multiple>
+                                <label for="documentos" class="file-upload-label">
+                                    <span>Haz clic o arrastra archivos aquí para subirlos</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Medidas de Seguridad Contra Robo -->
+
+            <!-- Coberturas (Secciones I y II) -->
+            <div class="form-section">
+                <h2 class="section-title">COBERTURAS</h2>
+                <h3 class="section-subtitle">SECCIÓN I Y II - INCENDIO DEL EDIFICIO Y CONTENIDOS</h3>
+                
+                <!-- Edificio -->
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Edificio</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cobertura_basica">Cobertura Básica (Incendio y/o Rayo):</label>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="suma_edificio" name="suma_edificio" class="form-input" placeholder="Suma Asegurada">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="sublimite_edificio" name="sublimite_edificio" class="form-input" placeholder="Sublímite">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="remocion_edificio">Remoción de Escombros (Edificio):</label>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="suma_remocion_edificio" name="suma_remocion_edificio" class="form-input" placeholder="Suma Asegurada">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="sublimite_remocion_edificio" name="sublimite_remocion_edificio" class="form-input" placeholder="Sublímite">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edificio_otra">Edificio Otra (Especificar):</label>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="edificio_otra_especificar" name="edificio_otra_especificar" class="form-input" placeholder="Especificar">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="suma_edificio_otra" name="suma_edificio_otra" class="form-input" placeholder="Suma Asegurada">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="sublimite_edificio_otra" name="sublimite_edificio_otra" class="form-input" placeholder="Sublímite">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenidos -->
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Contenidos</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cobertura_basica_contenidos">Cobertura Básica (Incendio y/o Rayo):</label>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="suma_contenidos" name="suma_contenidos" class="form-input" placeholder="Suma Asegurada">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="sublimite_contenidos" name="sublimite_contenidos" class="form-input" placeholder="Sublímite">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="remocion_contenidos">Remoción de Escombros (Contenidos):</label>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="suma_remocion_contenidos" name="suma_remocion_contenidos" class="form-input" placeholder="Suma Asegurada">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="sublimite_remocion_contenidos" name="sublimite_remocion_contenidos" class="form-input" placeholder="Sublímite">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contenidos_otra">Contenidos Otra (Especificar):</label>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="contenidos_otra_especificar" name="contenidos_otra_especificar" class="form-input" placeholder="Especificar">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="suma_contenidos_otra" name="suma_contenidos_otra" class="form-input" placeholder="Suma Asegurada">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="sublimite_contenidos_otra" name="sublimite_contenidos_otra" class="form-input" placeholder="Sublímite">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coberturas Adicionales -->
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Coberturas Adicionales (Secciones I y II)</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="cobertura_explosion" value="Sí">
+                                Explosión
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="cobertura_huelgas" value="Sí">
+                                Huelgas y Vandalismo
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="cobertura_terremoto" value="Sí">
+                                Terremoto y E.V.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="otra_cobertura" class="sr-only">Otra Cobertura</label>
+                            <input type="text" id="otra_cobertura" name="otra_cobertura" class="form-input" placeholder="Otra Cobertura (Especificar)">
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="ajuste_inflacionario" value="Sí">
+                                Ajuste Inflacionario
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Coberturas (Secciones I y II) -->
+
+            <!-- Bienes por Convenio Expreso -->
+            <div class="form-section">
+                <h2 class="section-title">BIENES POR CONVENIO EXPRESO</h2>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="descripcion_bienes">Descripción de Bienes por Convenio:</label>
+                        <textarea id="descripcion_bienes" name="descripcion_bienes" class="form-input" rows="3" placeholder="Describa los bienes cubiertos por convenio expreso"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Cláusulas Adicionales</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="valor_reposicion" value="Sí">
+                                Valor de Reposición
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="precio_neto_venta" value="Sí">
+                                Precio Neto de Venta
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="venta_salvamentos" value="Sí">
+                                Venta de Salvamentos
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="errores_avaluos" value="Sí">
+                                Errores en Avalúos
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gravamenes" value="Sí">
+                                Gravamenes
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="libros_registros" value="Sí">
+                                Libros y Registros
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="autorizacion_reponer" value="Sí">
+                                Autorización para Reponer, Reconstruir o Reparar
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="honorarios_profesionistas" value="Sí">
+                                Honorarios a Profesionistas
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="renuncia_inventarios" value="Sí">
+                                Renuncia de Inventarios al 10%
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="cincuenta_metros" value="Sí">
+                                Cincuenta Metros
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="no_subrogacion" value="Sí">
+                                No Subrogación
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="planos_moldes" value="Sí">
+                                Planos, Moldes y Modelos
+                            </label>
+                        </div>
+                        <div class="form-group" style="flex: 2;">
+                            <input type="text" id="otra_clausula" name="otra_clausula" class="form-input" placeholder="Otra (Describir)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Bienes por Convenio Expreso -->
+
+            <!-- Pérdida Consecuencial (Sección III) -->
+            <div class="form-section">
+                <h2 class="section-title">SECCIÓN III - PÉRDIDA CONSECUENCIAL</h2>
+                
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Pérdida Consecuencial</h4>
+                    
+                    <!-- Gastos Extraordinarios -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gastos_extraordinarios" value="Sí">
+                                Gastos Extraordinarios
+                            </label>
+                            <div class="form-row" style="margin-top: 0.5rem;">
+                                <div class="form-group">
+                                    <input type="text" id="suma_gastos_extra" name="suma_gastos_extra" class="form-input" placeholder="Suma Asegurada">
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="meses_gastos_extra" name="meses_gastos_extra" class="form-input" placeholder="Meses" min="1" max="12">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pérdida de Utilidades -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="perdida_utilidades" value="Sí">
+                                Pérdida de Utilidades
+                            </label>
+                            <div class="form-row" style="margin-top: 0.5rem;">
+                                <div class="form-group">
+                                    <input type="text" id="suma_perdida_util" name="suma_perdida_util" class="form-input" placeholder="Suma Asegurada">
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" id="meses_perdida_util" name="meses_perdida_util" class="form-input" placeholder="Meses" min="1" max="12">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Otras pérdidas consecuenciales -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="perdida_salarios" value="Sí">
+                                Pérdida de Salarios
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="perdida_gastos_fijos" value="Sí">
+                                Pérdida de Gastos Fijos
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="perdida_salarios_gastos" value="Sí">
+                                Pérdida de Salarios y Gastos Fijos
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="perdida_uts_salarios" value="Sí">
+                                Pérdida de UTS, Salarios y Gastos Fijos
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="perdida_rentas" value="Sí">
+                                Pérdida de Rentas
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="seguro_contingente" value="Sí">
+                                Seguro Contingente
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interdependencia" value="Sí">
+                                Interdependencia
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Pérdida Consecuencial General</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" id="suma_perdida_general" name="suma_perdida_general" class="form-input" placeholder="Suma Asegurada">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="porcentaje_perdida" name="porcentaje_perdida" class="form-input" placeholder="% Porc." min="0" max="100">
+                        </div>
+                    </div>
+                    <p class="form-note">Las sumas aseguradas deben corresponder a los importes anuales (0 al 100%) y los meses y porcentajes corresponden al período deseado de cobertura.</p>
+                </div>
+            </div>
+            <!-- Fin de Pérdida Consecuencial (Sección III) -->
+
+            <!-- Responsabilidad Civil (Sección IV) -->
+            <div class="form-section">
+                <h2 class="section-title">SECCIÓN IV - RESPONSABILIDAD CIVIL</h2>
+                
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Cobertura Básica RC Actividades e Inmuebles</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" id="suma_rc_actividades" name="suma_rc_actividades" class="form-input" placeholder="Suma Asegurada">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="sublimite_rc_actividades" name="sublimite_rc_actividades" class="form-input" placeholder="Sublímite">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Coberturas Adicionales</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rc_arrendatario" value="Sí">
+                                Arrendatario
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rc_carga_descarga" value="Sí">
+                                Carga y Descarga
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rc_asumida" value="Sí">
+                                Asumida (Caso por Caso)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rc_contratistas" value="Sí">
+                                Contratistas Independientes (Caso por Caso)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rc_contaminacion" value="Sí">
+                                Contaminación Súbita e Imprevista
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rc_productos_mexico" value="Sí">
+                                Productos en México
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="rc_trabajos_terminados" value="Sí">
+                                Trabajos Terminados en México
+                            </label>
+                        </div>
+                        <div class="form-group" style="flex: 2;">
+                            <input type="text" id="otra_rc" name="otra_rc" class="form-input" placeholder="Otra (Especificar)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="luc_dos_ubicaciones_rc" value="Sí">
+                            L.U.C. para dos o más ubicaciones
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Responsabilidad Civil (Sección IV) -->
+
+            <!-- Estacionamiento y Rotura de Cristales -->
+            <div class="form-section">
+                <h2 class="section-title">ESTACIONAMIENTO Y ROTURA DE CRISTALES</h2>
+                
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Estacionamiento</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="estacionamiento_cacom" value="Sí">
+                                C/ACOM. (Con Acceso Controlado)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="estacionamiento_sacom" value="Sí">
+                                S/ACOM. (Sin Acceso Controlado)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="estacionamiento_taller" value="Sí">
+                                Taller
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="no_cajones">No. Cajones (Estacionamiento / Taller):</label>
+                            <input type="number" id="no_cajones" name="no_cajones" class="form-input" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Guardarropa, Lavado y Planchado, Equipaje y Efectos de Huéspedes</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" id="sub_habitacion_prenda" name="sub_habitacion_prenda" class="form-input" placeholder="Sub. Habit./Prenda">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="sub_agreg_anual" name="sub_agreg_anual" class="form-input" placeholder="Sub. Agreg. Anual">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Rotura de Cristales</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" id="suma_asegurada_cristales" name="suma_asegurada_cristales" class="form-input" placeholder="Suma Asegurada">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="luc_dos_ubicaciones_cristales" value="Sí">
+                            L.U.C. para dos o más ubicaciones
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Coberturas Adicionales</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="actos_vandalicos" value="Sí">
+                                Actos Vandalicos
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="remocion" value="Sí">
+                                Remoción
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="decorado" value="Sí">
+                                Decorado
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="reparaciones" value="Sí">
+                                Reparaciones
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="alteraciones" value="Sí">
+                                Alteraciones
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="mejoras" value="Sí">
+                                Mejoras
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="pintura" value="Sí">
+                                Pintura
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="espejos" value="Sí">
+                                Espejos
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="cubiertas" value="Sí">
+                                Cubiertas
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="lunas" value="Sí">
+                                Lunas
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="domos" value="Sí">
+                                Domos
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="tragaluces" value="Sí">
+                                Tragaluces
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Estacionamiento y Rotura de Cristales -->
+
+            <!-- Anuncios Luminosos (Sección VI) -->
+            <div class="form-section">
+                <h2 class="section-title">SECCIÓN VI - ANUNCIOS LUMINOSOS</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="luc_dos_ubicaciones_anuncios" value="Sí">
+                            L.U.C. para dos o más ubicaciones
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="info_anuncios">Información Adicional:</label>
+                        <textarea id="info_anuncios" name="info_anuncios" class="form-input" rows="3" placeholder="Ingrese información adicional relacionada con los anuncios luminosos"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Anuncios Luminosos (Sección VI) -->
+
+            <!-- Robo con Violencia y/o Asalto (Sección VII) -->
+            <div class="form-section">
+                <h2 class="section-title">SECCIÓN VII - ROBO CON VIOLENCIA Y/O ASALTO</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="suma_asegurada_robo">Suma Asegurada:</label>
+                        <input type="text" id="suma_asegurada_robo" name="suma_asegurada_robo" class="form-input" placeholder="Ingrese el monto asegurado">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="luc_dos_ubicaciones_robo" value="Sí">
+                            L.U.C. para dos o más ubicaciones
+                        </label>
+                    </div>
+                </div>
+                
+                <p class="form-note">En caso de varias ubicaciones, se debe anexar la relación por separado.</p>
+            </div>
+            <!-- Fin de Robo con Violencia y/o Asalto (Sección VII) -->
+
+            <!-- Dinero y Valores (Sección VIII) -->
+            <div class="form-section">
+                <h2 class="section-title">SECCIÓN VIII - DINERO Y VALORES</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="suma_asegurada_dinero">Suma Asegurada:</label>
+                        <input type="text" id="suma_asegurada_dinero" name="suma_asegurada_dinero" class="form-input" placeholder="Ingrese el monto asegurado">
+                    </div>
+                </div>
+                
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Sublímites</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" id="dentro_sublimite" name="dentro_sublimite" class="form-input" placeholder="Dentro Sublímite">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="fuera_sublimite" name="fuera_sublimite" class="form-input" placeholder="Fuera Sublímite">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="especificar_dinero">Especificar:</label>
+                        <input type="text" id="especificar_dinero" name="especificar_dinero" class="form-input" placeholder="Especifique detalles adicionales">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="luc_dos_ubicaciones_dinero" value="Sí">
+                            L.U.C. para dos o más ubicaciones
+                        </label>
+                    </div>
+                </div>
+                
+                <p class="form-note">En caso de varias ubicaciones, se debe anexar la relación por separado.</p>
+            </div>
+            <!-- Fin de Dinero y Valores (Sección VIII) -->
+
+            <!-- Rotura de Maquinaria (Sección IX) -->
+            <div class="form-section">
+                <h2 class="section-title">SECCIÓN IX - ROTURA DE MAQUINARIA</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="suma_asegurada_maquinaria">Suma Asegurada:</label>
+                        <input type="text" id="suma_asegurada_maquinaria" name="suma_asegurada_maquinaria" class="form-input" placeholder="Ingrese el monto asegurado">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="coberturas_maquinaria">Coberturas Adicionales (Especificar):</label>
+                        <input type="text" id="coberturas_maquinaria" name="coberturas_maquinaria" class="form-input" placeholder="Especifique coberturas adicionales">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="antiguedad_maquinaria">Antigüedad de la Maquinaria:</label>
+                        <input type="text" id="antiguedad_maquinaria" name="antiguedad_maquinaria" class="form-input" placeholder="Ingrese la antigüedad">
+                    </div>
+                </div>
+                
+                <p class="form-note">En caso de varias ubicaciones, se debe anexar la relación por separado. Incluya una relación detallada de los equipos con valor, marca, tipo, año de fabricación y número de serie.</p>
+            </div>
+            <!-- Fin de Rotura de Maquinaria (Sección IX) -->
+
+            <!-- Calderas y Equipos Sujetos a Presión (Sección X) -->
+            <div class="form-section">
+                <h2 class="section-title">SECCIÓN X - CALDERAS Y EQUIPOS SUJETOS A PRESIÓN</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="suma_asegurada_calderas">Suma Asegurada:</label>
+                        <input type="text" id="suma_asegurada_calderas" name="suma_asegurada_calderas" class="form-input" placeholder="Ingrese el monto asegurado">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="coberturas_calderas">Coberturas Adicionales (Especificar):</label>
+                        <input type="text" id="coberturas_calderas" name="coberturas_calderas" class="form-input" placeholder="Especifique coberturas adicionales">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="antiguedad_equipos">Antigüedad de los Equipos:</label>
+                        <input type="text" id="antiguedad_equipos" name="antiguedad_equipos" class="form-input" placeholder="Ingrese la antigüedad">
+                    </div>
+                </div>
+                
+                <p class="form-note">En caso de varias ubicaciones, se debe anexar la relación por separado. Incluya una relación detallada de los equipos con valor, marca, tipo, año de fabricación y número de serie.</p>
+            </div>
+            <!-- Fin de Calderas y Equipos Sujetos a Presión (Sección X) -->
+
+            <!-- Equipo Electrónico (Sección XI) -->
+            <div class="form-section">
+                <h2 class="section-title">SECCIÓN XI - EQUIPO ELECTRÓNICO</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="suma_asegurada_equipo">Suma Asegurada:</label>
+                        <input type="text" id="suma_asegurada_equipo" name="suma_asegurada_equipo" class="form-input" placeholder="Ingrese el monto asegurado">
+                    </div>
+                </div>
+                
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Sublímites</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" id="equipo_fijo" name="equipo_fijo" class="form-input" placeholder="Equipo Fijo Sublímite">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="equipo_movil" name="equipo_movil" class="form-input" placeholder="Equipo Móvil Sublímite">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="coberturas_equipo">Coberturas Adicionales (Especificar):</label>
+                        <input type="text" id="coberturas_equipo" name="coberturas_equipo" class="form-input" placeholder="Especifique coberturas adicionales">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="antiguedad_equipo">Antigüedad de los Equipos:</label>
+                        <input type="text" id="antiguedad_equipo" name="antiguedad_equipo" class="form-input" placeholder="Ingrese la antigüedad">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="descripcion_equipo">Breve Descripción del(os) Equipo(s):</label>
+                        <textarea id="descripcion_equipo" name="descripcion_equipo" class="form-input" rows="2" placeholder="Describa los equipos"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="equipo_administrativo" value="Sí">
+                            El Equipo es para Uso Administrativo?
+                        </label>
+                    </div>
+                </div>
+                
+                <p class="form-note">En caso de varias ubicaciones, se debe anexar la relación por separado. Incluya una relación detallada de los equipos con valor, marca, tipo, año de fabricación y número de serie.</p>
+            </div>
+            <!-- Fin de Equipo Electrónico (Sección XI) -->
+
+            <!-- Siniestralidad -->
+            <div class="form-section">
+                <h2 class="section-title">SINIESTRALIDAD</h2>
+                
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Indicación de Siniestralidad de los últimos 3 años</h4>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="siniestro_fecha_1">Fecha:</label>
+                            <input type="date" id="siniestro_fecha_1" name="siniestro_fecha_1" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="siniestro_causa_1">Causa y/o Cobertura Afectada:</label>
+                            <input type="text" id="siniestro_causa_1" name="siniestro_causa_1" class="form-input" placeholder="Especifique causa/cobertura">
+                        </div>
+                        <div class="form-group">
+                            <label for="siniestro_monto_1">Monto:</label>
+                            <input type="text" id="siniestro_monto_1" name="siniestro_monto_1" class="form-input" placeholder="Monto">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="siniestro_fecha_2">Fecha:</label>
+                            <input type="date" id="siniestro_fecha_2" name="siniestro_fecha_2" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="siniestro_causa_2">Causa y/o Cobertura Afectada:</label>
+                            <input type="text" id="siniestro_causa_2" name="siniestro_causa_2" class="form-input" placeholder="Especifique causa/cobertura">
+                        </div>
+                        <div class="form-group">
+                            <label for="siniestro_monto_2">Monto:</label>
+                            <input type="text" id="siniestro_monto_2" name="siniestro_monto_2" class="form-input" placeholder="Monto">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="siniestro_fecha_3">Fecha:</label>
+                            <input type="date" id="siniestro_fecha_3" name="siniestro_fecha_3" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="siniestro_causa_3">Causa y/o Cobertura Afectada:</label>
+                            <input type="text" id="siniestro_causa_3" name="siniestro_causa_3" class="form-input" placeholder="Especifique causa/cobertura">
+                        </div>
+                        <div class="form-group">
+                            <label for="siniestro_monto_3">Monto:</label>
+                            <input type="text" id="siniestro_monto_3" name="siniestro_monto_3" class="form-input" placeholder="Monto">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Notas Legales</h4>
+                    <p class="form-note">Este documento constituye una solicitud de seguro y no representa garantía alguna de aceptación. La aceptación de la solicitud no implica automáticamente la emisión de una póliza de seguro ni un recibo válido.</p>
+                </div>
+                
+                <div class="form-subsection">
+                    <h4 class="subsection-title">Firmas</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre_asegurado">Nombre del Asegurado:</label>
+                            <input type="text" id="nombre_asegurado" name="nombre_asegurado" class="form-input" placeholder="Nombre completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_firma">Fecha:</label>
+                            <input type="date" id="fecha_firma" name="fecha_firma" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lugar_firma">Lugar:</label>
+                            <input type="text" id="lugar_firma" name="lugar_firma" class="form-input" placeholder="Ciudad, Estado">
+                        </div>
+                        <div class="form-group">
+                            <label for="firma_asegurado">Firma del Asegurado:</label>
+                            <input type="text" id="firma_asegurado" name="firma_asegurado" class="form-input" placeholder="Firme aquí">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre_agente">Nombre del Agente:</label>
+                            <input type="text" id="nombre_agente" name="nombre_agente" class="form-input" placeholder="Nombre completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="firma_agente">Firma del Agente:</label>
+                            <input type="text" id="firma_agente" name="firma_agente" class="form-input" placeholder="Firme aquí">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin de Siniestralidad -->
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; {currentYear} ONE COACH DAÑOS. Todos los derechos reservados.</p>
+    </footer>
+    
+
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			// --- Variables Globales ---
+			let currentStep = 1;
+			const totalSteps = 6;
+			const form = document.getElementById('wizard-form');
+			const steps = Array.from(document.querySelectorAll('.form-step'));
+			const navSteps = Array.from(document.querySelectorAll('.nav-step'));
+			const progressFill = document.getElementById('progress-fill');
+			const progressPercent = document.getElementById('progress-percent');
+			const currentSectionName = document.getElementById('current-section-name');
+			const themeToggleButton = document.querySelector('.theme-toggle');
+			const themeIcon = document.getElementById('theme-icon');
+	
+			// --- Navegación del Wizard ---
+			window.nextStep = function() {
+				if (validateStep(currentStep)) {
+					if (currentStep < totalSteps) {
+						currentStep++;
+						goToStep(currentStep);
+					}
+				}
+			}
+	
+			window.prevStep = function() {
+				if (currentStep > 1) {
+					currentStep--;
+					goToStep(currentStep);
+				}
+			}
+	
+			window.goToStep = function(stepNumber) {
+				currentStep = stepNumber;
+				// Oculta todos los pasos y quita la clase 'active'
+				steps.forEach(step => step.classList.remove('active'));
+				navSteps.forEach(nav => nav.classList.remove('active'));
+	
+				// Muestra el paso actual
+				document.getElementById(`step-${currentStep}`).classList.add('active');
+				const currentNav = document.querySelector(`.nav-step[data-step="${currentStep}"]`);
+				currentNav.classList.add('active');
+	
+				// Marca los pasos anteriores como completados
+				navSteps.forEach((nav, index) => {
+					if (index < currentStep - 1) {
+						nav.classList.add('completed');
+					} else {
+						nav.classList.remove('completed');
+					}
+				});
+	
+				updateProgress();
+			}
+			
+			// --- Validación ---
+			// --- Reemplaza la función validateStep anterior con esta ---
+
+function validateStep(stepNumber) {
+    const currentStepElement = steps[stepNumber - 1];
+    const fieldsToValidate = currentStepElement.querySelectorAll('input[required], select[required], textarea[required]');
+    let isStepValid = true;
+
+    // Primero, limpia todos los indicadores de error del paso actual
+    currentStepElement.querySelectorAll('.field-group').forEach(group => {
+        group.classList.remove('has-error');
+    });
+
+    // Ahora, valida cada campo
+    for (const field of fieldsToValidate) {
+        // Verifica si el campo (que está visible) es inválido
+        if (!field.checkValidity()) {
+            isStepValid = false;
+            // Busca el contenedor padre '.field-group' para aplicarle el estilo
+            const fieldGroup = field.closest('.field-group, .option-group');
+            if (fieldGroup) {
+                fieldGroup.classList.add('has-error')
+            }
+        }
+    }
+    
+    // Si la validación falla, no se avanzará de paso.
+    return isStepValid;
+}
+	
+			// --- Actualización de Progreso ---
+			function updateProgress() {
+				const percent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+				progressFill.style.width = `${percent}%`;
+				progressPercent.textContent = Math.round(percent);
+				currentSectionName.textContent = document.querySelector(`.nav-step[data-step="${currentStep}"] .step-title`).textContent;
+			}
+	
+			// --- Toggle para el Tema Oscuro ---
+			window.toggleTheme = function() {
+				document.body.classList.toggle('dark-theme');
+				if (document.body.classList.contains('dark-theme')) {
+					themeIcon.textContent = '☀️'; // Sol
+					localStorage.setItem('theme', 'dark');
+				} else {
+					themeIcon.textContent = '🌙'; // Luna
+					localStorage.setItem('theme', 'light');
+				}
+			}
+	
+			// Cargar tema guardado
+			if (localStorage.getItem('theme') === 'dark') {
+				document.body.classList.add('dark-theme');
+				themeIcon.textContent = '☀️';
+			}
+	
+			// --- Lógica Adicional ---
+			window.toggleRiskAddress = function(checkbox) {
+				const riskFields = document.getElementById('risk-address-fields');
+				const requiredInputs = riskFields.querySelectorAll('input, select');
+				
+				if (checkbox.checked) {
+					riskFields.style.display = 'none';
+					requiredInputs.forEach(input => input.removeAttribute('required'));
+				} else {
+					riskFields.style.display = 'block';
+					requiredInputs.forEach(input => {
+						// Solo vuelve a poner 'required' si lo tenía originalmente
+						// (En este caso, todos los campos de dirección lo tienen)
+						 input.setAttribute('required', 'required');
+					});
+				}
+			};
+	
+			// --- Inicialización ---
+			updateProgress(); // Llama a la función al cargar la página por primera vez
+		});
+	</script>
+    <!-- JavaScript para funcionalidad del wizard -->
+    <script>
+        let currentStep = 1;
+        const totalSteps = 6;
+        let completedSteps = new Set();
+        
+        // Función para avanzar al siguiente paso - NUEVA VERSION
+        function nextStep() {
+            console.log('🚀 NEXT STEP - Paso actual:', currentStep);
+            
+            // Validar el paso actual
+            const isValid = validateCurrentStep();
+            console.log('✅ Validación resultado:', isValid);
+            
+            if (isValid) {
+                if (currentStep < totalSteps) {
+                    console.log('➡️ Avanzando al paso', currentStep + 1);
+                    completedSteps.add(currentStep);
+                    currentStep++;
+                    updateWizard();
+                    updateProgress();
+                    showStepTransition();
+                    
+                    // Scroll suave al inicio del siguiente paso
+                    setTimeout(() => {
+                        const nextStepElement = document.getElementById(`step-${currentStep}`);
+                        if (nextStepElement) {
+                            nextStepElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }, 100);
+                } else {
+                    console.log('🏁 Ya estás en el último paso');
+                    showNotification('¡Ya estás en el último paso!', 'info');
+                }
+            } else {
+                console.log('❌ No se puede avanzar - validación falló');
+            }
+        }
+        
+        // Función para retroceder al paso anterior
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateWizard();
+                updateProgress();
+                showStepTransition();
+            }
+        }
+        
+        // Función para ir directamente a un paso específico
+        function goToStep(step) {
+            // Solo permitir navegar a pasos completados o el siguiente paso
+            if (step <= currentStep || completedSteps.has(step - 1) || step === 1) {
+                currentStep = step;
+                updateWizard();
+                updateProgress();
+                showStepTransition();
+            } else {
+                showNotification('Completa los pasos anteriores para continuar', 'warning');
+            }
+        }
+        
+        // Animación de transición entre pasos
+        function showStepTransition() {
+            const currentStepEl = document.getElementById(`step-${currentStep}`);
+            if (currentStepEl) {
+                currentStepEl.style.transform = 'translateX(-20px)';
+                currentStepEl.style.opacity = '0';
+                
+                setTimeout(() => {
+                    currentStepEl.style.transform = 'translateX(0)';
+                    currentStepEl.style.opacity = '1';
+                }, 100);
+            }
+        }
+        
+        // Actualizar el estado visual del wizard
+        function updateWizard() {
+            // Ocultar todos los pasos
+            document.querySelectorAll('.form-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Mostrar el paso actual
+            const currentStepEl = document.getElementById(`step-${currentStep}`);
+            if (currentStepEl) {
+                currentStepEl.classList.add('active');
+            }
+            
+            // Actualizar navegación superior
+            document.querySelectorAll('.nav-step').forEach((navStep, index) => {
+                navStep.classList.remove('active', 'completed', 'accessible');
+                
+                if (index + 1 === currentStep) {
+                    navStep.classList.add('active');
+                } else if (completedSteps.has(index + 1)) {
+                    navStep.classList.add('completed');
+                } 
+                
+                // Marcar pasos accesibles
+                if (index + 1 <= currentStep || completedSteps.has(index) || index === 0) {
+                    navStep.classList.add('accessible');
+                }
+            });
+        }
+        
+        // Actualizar barra de progreso
+        function updateProgress() {
+            const progressPercent = Math.round((currentStep / totalSteps) * 100);
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercText = document.getElementById('progress-percent');
+            const currentSectionName = document.getElementById('current-section-name');
+            
+            if (progressFill) progressFill.style.width = `${progressPercent}%`;
+            if (progressPercText) progressPercText.textContent = progressPercent;
+            
+            // Actualizar nombre de la sección actual
+            const sectionNames = [
+                'Información Básica',
+                'Ubicación de Riesgo', 
+                'Características',
+                'Seguridad',
+                'Coberturas',
+                'Finalizar'
+            ];
+            if (currentSectionName) {
+                currentSectionName.textContent = sectionNames[currentStep - 1] || 'Completando...';
+            }
+        }
+        
+        // VALIDACIÓN COMPLETAMENTE NUEVA Y SIMPLE
+        function validateCurrentStep() {
+            console.log('🔍 Validando paso:', currentStep);
+            
+            // Validación específica para cada paso
+            switch(currentStep) {
+                case 1:
+                    return validateStep1();
+                case 2:
+                    return validateStep2();
+                case 3:
+                    return validateStep3();
+                case 4:
+                    return true; // Paso 4 no tiene campos requeridos
+                case 5:
+                    return true; // Paso 5 no tiene campos requeridos
+                case 6:
+                    return validateStep6();
+                default:
+                    return true;
+            }
+        }
+        
+        function validateStep1() {
+            console.log('📝 Validando Paso 1: Información Básica');
+            const requiredFields = [
+                { id: 'rfc', name: 'RFC' },
+                { id: 'razon-social', name: 'Razón Social' },
+                { id: 'cp', name: 'Código Postal' },
+                { id: 'telefono', name: 'Teléfono' },
+                { id: 'correo', name: 'Correo Electrónico' }
+            ];
+            
+            return validateFields(requiredFields);
+        }
+        
+        function validateStep2() {
+            console.log('📝 Validando Paso 2: Ubicación de Riesgo');
+            const sameAddress = document.getElementById('same-address');
+            
+            if (sameAddress && sameAddress.checked) {
+                console.log('✅ Misma dirección seleccionada');
+                return true;
+            }
+            
+            const requiredFields = [
+                { id: 'cp-riesgo', name: 'Código Postal de Riesgo' },
+                { id: 'calle-riesgo', name: 'Calle de Riesgo' },
+                { id: 'numero-riesgo', name: 'Número de Riesgo' }
+            ];
+            
+            return validateFields(requiredFields);
+        }
+        
+        function validateStep3() {
+            console.log('📝 Validando Paso 3: Características');
+            const requiredFields = [
+                { id: 'anio-construccion', name: 'Año de Construcción' },
+                { id: 'uso-inmueble', name: 'Uso del Inmueble' }
+            ];
+            
+            // Validar campos básicos
+            const basicValid = validateFields(requiredFields);
+            
+            // Validar tipo de construcción (radio buttons)
+            const tipoConstructionSelected = document.querySelector('input[name="tipo_construccion"]:checked');
+            if (!tipoConstructionSelected) {
+                showNotification('⚠️ Por favor selecciona el tipo de construcción', 'warning');
+                return false;
+            }
+            
+            return basicValid;
+        }
+        
+        function validateStep6() {
+            console.log('📝 Validando Paso 6: Finalizar');
+            const requiredFields = [
+                { id: 'nombre_asegurado', name: 'Nombre del Asegurado' }
+            ];
+            
+            return validateFields(requiredFields);
+        }
+        
+        interface FieldConfig {
+            id: string;
+            name: string;
+        }
+        
+        function validateFields(fields: FieldConfig[]) {
+            let isValid = true;
+            let firstInvalidField = null;
+            const currentStepEl = document.getElementById(`step-${currentStep}`);
+            
+            // Primero, limpia todos los errores previos
+            fields.forEach(fieldConfig => {
+                // Buscar el campo dentro del paso actual para evitar IDs duplicados
+                const field = currentStepEl?.querySelector(`[id='${fieldConfig.id}']`) as HTMLInputElement | null
+                    || document.getElementById(fieldConfig.id) as HTMLInputElement | null;
+                if (field) {
+                    const fieldGroup = field.closest('.field-group');
+                    if (fieldGroup) {
+                        fieldGroup.classList.remove('has-error');
+                    }
+                }
+            });
+            
+            // Luego valida los campos
+            fields.forEach(fieldConfig => {
+                // Buscar el campo dentro del paso actual para evitar IDs duplicados
+                const field = currentStepEl?.querySelector(`[id='${fieldConfig.id}']`) as HTMLInputElement | null
+                    || document.getElementById(fieldConfig.id) as HTMLInputElement | null;
+                if (!field) {
+                    console.log(`❌ Campo no encontrado: ${fieldConfig.id}`);
+                    return;
+                }
+                
+                const value = field.value ? field.value.trim() : '';
+                console.log(`🔍 ${fieldConfig.name}: "${value}"`);
+                
+                if (!value) {
+                    console.log(`❌ Campo vacío: ${fieldConfig.name}`);
+                    const fieldGroup = field.closest('.field-group') || field.parentElement;
+                    if (fieldGroup) {
+                        fieldGroup.classList.add('has-error');
+                    } else {
+                        // Si no encuentra un field-group, aplica estilos directamente
+                        field.style.borderColor = '#ef4444';
+                        field.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
+                    }
+                    
+                    if (!firstInvalidField) firstInvalidField = field;
+                    isValid = false;
+                    
+                    // Mostrar notificación del primer campo inválido
+                    if (firstInvalidField === field) {
+                        showNotification(`Por favor completa el campo: ${fieldConfig.name}`, 'error');
+                    }
+                } else {
+                    console.log(`✅ Campo válido: ${fieldConfig.name}`);
+                    const fieldGroup = field.closest('.field-group') || field.parentElement;
+                    if (fieldGroup) {
+                        fieldGroup.classList.remove('has-error');
+                    }
+                    field.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.2)';
+                }
+            });
+            
+            if (!isValid) {
+                showNotification('⚠️ Por favor completa todos los campos requeridos', 'warning');
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                    firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else {
+                showNotification('✅ Sección completada correctamente', 'success');
+            }
+            
+            console.log(`📊 Resultado validación: ${isValid}`);
+            return isValid;
+        }
+
+        // Helper para obtener el valor visible/activo cuando hay duplicados
+        function getActiveValueBy({ id, name }: { id?: string; name?: string; }): string {
+            // 1) Intentar dentro del paso activo
+            const activeStep = document.querySelector('.form-step.active') as HTMLElement | null;
+            if (activeStep) {
+                if (id) {
+                    const el = activeStep.querySelector(`#${id}`) as HTMLInputElement | HTMLSelectElement | null;
+                    if (el && (el as any).value) return (el as any).value;
+                }
+                if (name) {
+                    const els = Array.from(activeStep.querySelectorAll(`[name='${name}']`)) as (HTMLInputElement | HTMLSelectElement)[];
+                    for (const el of els) {
+                        if (el && el.value) return el.value;
+                    }
+                }
+            }
+            // 2) Elemento visible en el documento
+            if (name) {
+                const all = Array.from(document.querySelectorAll(`[name='${name}']`)) as (HTMLInputElement | HTMLSelectElement)[];
+                for (const el of all) {
+                    if ((el as any).offsetParent !== null && el.value) return el.value;
+                }
+                // último no vacío
+                for (const el of all.reverse()) {
+                    if (el.value) return el.value;
+                }
+            }
+            if (id) {
+                const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+                if (el && el.value) return el.value;
+            }
+            return '';
+        }
+        
+        // Función para manejar clicks en checkboxes y opciones
+        function toggleOption(element, inputId) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                if (input.type === 'checkbox') {
+                    input.checked = !input.checked;
+                    element.classList.toggle('checked', input.checked);
+                    
+                    // Efectos visuales
+                    if (input.checked) {
+                        element.style.transform = 'scale(1.02)';
+                        setTimeout(() => element.style.transform = 'scale(1)', 150);
+                    }
+                }
+            }
+        }
+        
+        // Función para manejar radio buttons
+        function selectRadio(element, name, value) {
+            // Desmarcar todos los elementos del mismo grupo
+            document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                const parent = radio.closest('.option-item');
+                if (parent) {
+                    parent.classList.remove('checked');
+                }
+                radio.checked = false;
+            });
+            
+            // Marcar el elemento seleccionado
+            const input = element.querySelector('input');
+            if (input) {
+                input.checked = true;
+                input.value = value;
+                element.classList.add('checked');
+                
+                // Efecto visual
+                element.style.transform = 'scale(1.02)';
+                setTimeout(() => element.style.transform = 'scale(1)', 150);
+            }
+        }
+        
+        // Autocompletar dirección basado en código postal MEJORADO
+        function setupPostalCodeAutocomplete() {
+            const cpInput = document.getElementById('cp');
+            const estadoSelect = document.getElementById('estado');
+            const cpRiesgoInput = document.getElementById('cp-riesgo');
+            
+            // Base de datos de códigos postales mexicanos - EXTENDIDA Y MEJORADA
+            const postalData = {
+                // Ciudad de México - Ampliado
+                '01000': { estado: 'Ciudad de México', municipio: 'Álvaro Obregón', colonia: 'San Ángel' },
+                '01010': { estado: 'Ciudad de México', municipio: 'Álvaro Obregón', colonia: 'San Ángel Inn' },
+                '01020': { estado: 'Ciudad de México', municipio: 'Álvaro Obregón', colonia: 'San Ángel Sur' },
+                '06700': { estado: 'Ciudad de México', municipio: 'Cuauhtémoc', colonia: 'Roma Norte' },
+                '06760': { estado: 'Ciudad de México', municipio: 'Cuauhtémoc', colonia: 'Roma Sur' },
+                '06100': { estado: 'Ciudad de México', municipio: 'Cuauhtémoc', colonia: 'Centro Histórico' },
+                '11000': { estado: 'Ciudad de México', municipio: 'Miguel Hidalgo', colonia: 'Escandón' },
+                '11550': { estado: 'Ciudad de México', municipio: 'Miguel Hidalgo', colonia: 'Polanco' },
+                '11580': { estado: 'Ciudad de México', municipio: 'Miguel Hidalgo', colonia: 'Polanco Chapultepec' },
+                '03100': { estado: 'Ciudad de México', municipio: 'Benito Juárez', colonia: 'Del Valle Centro' },
+                '03810': { estado: 'Ciudad de México', municipio: 'Benito Juárez', colonia: 'Nápoles' },
+                '03900': { estado: 'Ciudad de México', municipio: 'Benito Juárez', colonia: 'Del Valle Norte' },
+                '07300': { estado: 'Ciudad de México', municipio: 'Gustavo A. Madero', colonia: 'Lindavista Norte' },
+                '04100': { estado: 'Ciudad de México', municipio: 'Coyoacán', colonia: 'Del Carmen' },
+                '04310': { estado: 'Ciudad de México', municipio: 'Coyoacán', colonia: 'Copilco Universidad' },
+                
+                // Jalisco - Ampliado
+                '44100': { estado: 'Jalisco', municipio: 'Guadalajara', colonia: 'Centro' },
+                '44630': { estado: 'Jalisco', municipio: 'Guadalajara', colonia: 'Jardines del Bosque' },
+                '44650': { estado: 'Jalisco', municipio: 'Guadalajara', colonia: 'Providencia' },
+                '44160': { estado: 'Jalisco', municipio: 'Guadalajara', colonia: 'Lafayette' },
+                '44280': { estado: 'Jalisco', municipio: 'Guadalajara', colonia: 'Americana' },
+                '45019': { estado: 'Jalisco', municipio: 'Zapopan', colonia: 'El Bajío' },
+                '45070': { estado: 'Jalisco', municipio: 'Zapopan', colonia: 'Arcos Vallarta' },
+                '45116': { estado: 'Jalisco', municipio: 'Zapopan', colonia: 'Colinas de San Javier' },
+                '45050': { estado: 'Jalisco', municipio: 'Zapopan', colonia: 'Ciudad del Sol' },
+                '45200': { estado: 'Jalisco', municipio: 'Zapopan', colonia: 'Tesistán' },
+                
+                // Nuevo León - Ampliado
+                '64000': { estado: 'Nuevo León', municipio: 'Monterrey', colonia: 'Centro' },
+                '64720': { estado: 'Nuevo León', municipio: 'Monterrey', colonia: 'Cumbres' },
+                '64710': { estado: 'Nuevo León', municipio: 'Monterrey', colonia: 'Valle Oriente' },
+                '66220': { estado: 'Nuevo León', municipio: 'San Pedro Garza García', colonia: 'Del Valle' },
+                '66260': { estado: 'Nuevo León', municipio: 'San Pedro Garza García', colonia: 'San Pedro Centro' },
+                '66230': { estado: 'Nuevo León', municipio: 'San Pedro Garza García', colonia: 'Colinas de San Jerónimo' },
+                '64700': { estado: 'Nuevo León', municipio: 'Monterrey', colonia: 'Residencial San Agustín' },
+                '67100': { estado: 'Nuevo León', municipio: 'Guadalupe', colonia: 'Centro' },
+                '66600': { estado: 'Nuevo León', municipio: 'Apodaca', colonia: 'Centro' },
+                
+                // Sinaloa - AMPLIAMENTE EXTENDIDO (tu zona)
+                '80000': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Centro' },
+                '80020': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Las Quintas' },
+                '80030': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Chapultepec' },
+                '80040': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Recursos Hidráulicos' },
+                '80050': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Guadalupe' },
+                '80060': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Tierra Blanca' },
+                '80070': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Jorge Almada' },
+                '80100': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Tres Ríos' },
+                '80110': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Las Flores' },
+                '80120': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Libertad' },
+                '80130': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Stase' },
+                '80140': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Constitución' },
+                '80150': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Lomas del Boulevard' },
+                '80200': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Scally' },
+                '80220': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Villa Verde' },
+                '80230': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Campiña' },
+                '80240': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Bonampak' },
+                '80250': { estado: 'Sinaloa', municipio: 'Culiacán', colonia: 'Los Pinos' },
+                '82000': { estado: 'Sinaloa', municipio: 'Mazatlán', colonia: 'Centro' },
+                '82100': { estado: 'Sinaloa', municipio: 'Mazatlán', colonia: 'Olas Altas' },
+                '82110': { estado: 'Sinaloa', municipio: 'Mazatlán', colonia: 'Zona Dorada' },
+                '82120': { estado: 'Sinaloa', municipio: 'Mazatlán', colonia: 'Gaviotas Norte' },
+                '82130': { estado: 'Sinaloa', municipio: 'Mazatlán', colonia: 'Cerritos' },
+                '81200': { estado: 'Sinaloa', municipio: 'Ahome', colonia: 'Los Mochis Centro' },
+                '81210': { estado: 'Sinaloa', municipio: 'Ahome', colonia: 'Scally' },
+                '81220': { estado: 'Sinaloa', municipio: 'Ahome', colonia: 'Guadalupe' },
+                '81230': { estado: 'Sinaloa', municipio: 'Ahome', colonia: 'Jiquilpan' },
+                '81240': { estado: 'Sinaloa', municipio: 'Ahome', colonia: 'Florida' },
+                '81250': { estado: 'Sinaloa', municipio: 'Ahome', colonia: 'Los Algodones' },
+                '82300': { estado: 'Sinaloa', municipio: 'Rosario', colonia: 'Centro' },
+                '82400': { estado: 'Sinaloa', municipio: 'Escuinapa', colonia: 'Centro' },
+                
+                // Estado de México - Ampliado
+                '50000': { estado: 'Estado de México', municipio: 'Toluca', colonia: 'Centro' },
+                '50070': { estado: 'Estado de México', municipio: 'Toluca', colonia: 'Universidad' },
+                '50120': { estado: 'Estado de México', municipio: 'Toluca', colonia: 'Las Americas' },
+                '50130': { estado: 'Estado de México', municipio: 'Toluca', colonia: 'Morelos' },
+                '53100': { estado: 'Estado de México', municipio: 'Naucalpan', colonia: 'Centro' },
+                '53950': { estado: 'Estado de México', municipio: 'Naucalpan', colonia: 'Lomas Verdes' },
+                '54000': { estado: 'Estado de México', municipio: 'Tlalnepantla', colonia: 'Centro' },
+                '55700': { estado: 'Estado de México', municipio: 'Cuautitlán Izcalli', colonia: 'Centro Urbano' },
+                '52000': { estado: 'Estado de México', municipio: 'Lerma', colonia: 'Centro' },
+                '54700': { estado: 'Estado de México', municipio: 'Cuautitlán', colonia: 'Centro' },
+                
+                // Otros estados importantes - Ampliado
+                '20000': { estado: 'Aguascalientes', municipio: 'Aguascalientes', colonia: 'Centro' },
+                '20100': { estado: 'Aguascalientes', municipio: 'Aguascalientes', colonia: 'Zona Centro' },
+                '20200': { estado: 'Aguascalientes', municipio: 'Aguascalientes', colonia: 'Las Arboledas' },
+                '22000': { estado: 'Baja California', municipio: 'Tijuana', colonia: 'Centro' },
+                '22400': { estado: 'Baja California', municipio: 'Tijuana', colonia: 'Zona Río' },
+                '22500': { estado: 'Baja California', municipio: 'Tijuana', colonia: 'Las Playas' },
+                '21000': { estado: 'Baja California', municipio: 'Mexicali', colonia: 'Centro' },
+                '77500': { estado: 'Quintana Roo', municipio: 'Cancún', colonia: 'Centro' },
+                '77510': { estado: 'Quintana Roo', municipio: 'Cancún', colonia: 'Zona Hotelera' },
+                '77710': { estado: 'Quintana Roo', municipio: 'Playa del Carmen', colonia: 'Centro' },
+                '77600': { estado: 'Quintana Roo', municipio: 'Cozumel', colonia: 'Centro' },
+                
+                // Más estados importantes - COMPLETADO
+                '44240': { estado: 'Jalisco', municipio: 'Guadalajara', colonia: 'Vallarta Norte' },
+                '45030': { estado: 'Jalisco', municipio: 'Zapopan', colonia: 'Vallarta Universidad' },
+                
+                // Guanajuato completo
+                '36000': { estado: 'Guanajuato', municipio: 'Guanajuato', colonia: 'Centro' },
+                '36100': { estado: 'Guanajuato', municipio: 'Guanajuato', colonia: 'Valenciana' },
+                '37000': { estado: 'Guanajuato', municipio: 'León', colonia: 'Centro' },
+                '37100': { estado: 'Guanajuato', municipio: 'León', colonia: 'San Miguel' },
+                '38000': { estado: 'Guanajuato', municipio: 'Celaya', colonia: 'Centro' },
+                '36500': { estado: 'Guanajuato', municipio: 'Irapuato', colonia: 'Centro' },
+                
+                // San Luis Potosí ampliado
+                '78000': { estado: 'San Luis Potosí', municipio: 'San Luis Potosí', colonia: 'Centro' },
+                '78200': { estado: 'San Luis Potosí', municipio: 'San Luis Potosí', colonia: 'Las Águilas' },
+                '78300': { estado: 'San Luis Potosí', municipio: 'San Luis Potosí', colonia: 'Lomas' },
+                '79000': { estado: 'San Luis Potosí', municipio: 'Ciudad Valles', colonia: 'Centro' },
+                
+                // Chiapas ampliado
+                '29000': { estado: 'Chiapas', municipio: 'Tuxtla Gutiérrez', colonia: 'Centro' },
+                '29020': { estado: 'Chiapas', municipio: 'Tuxtla Gutiérrez', colonia: 'Xamaipak' },
+                '29030': { estado: 'Chiapas', municipio: 'Tuxtla Gutiérrez', colonia: 'Las Granjas' },
+                '30700': { estado: 'Chiapas', municipio: 'Tapachula', colonia: 'Centro' },
+                '29200': { estado: 'Chiapas', municipio: 'San Cristóbal de las Casas', colonia: 'Centro' },
+                
+                // Morelos ampliado
+                '62000': { estado: 'Morelos', municipio: 'Cuernavaca', colonia: 'Centro' },
+                '62100': { estado: 'Morelos', municipio: 'Cuernavaca', colonia: 'Carolina' },
+                '62200': { estado: 'Morelos', municipio: 'Cuernavaca', colonia: 'Vista Hermosa' },
+                '62440': { estado: 'Morelos', municipio: 'Cuernavaca', colonia: 'Lomas de Cortés' },
+                
+                // Veracruz ampliado
+                '91000': { estado: 'Veracruz', municipio: 'Xalapa', colonia: 'Centro' },
+                '91020': { estado: 'Veracruz', municipio: 'Xalapa', colonia: 'Rafael Lucio' },
+                '91700': { estado: 'Veracruz', municipio: 'Veracruz', colonia: 'Centro' },
+                '91900': { estado: 'Veracruz', municipio: 'Veracruz', colonia: 'Mocambo' },
+                '94100': { estado: 'Veracruz', municipio: 'Córdoba', colonia: 'Centro' },
+                '96400': { estado: 'Veracruz', municipio: 'Coatzacoalcos', colonia: 'Centro' },
+                
+                // Yucatán ampliado
+                '97000': { estado: 'Yucatán', municipio: 'Mérida', colonia: 'Centro' },
+                '97070': { estado: 'Yucatán', municipio: 'Mérida', colonia: 'García Ginerés' },
+                '97100': { estado: 'Yucatán', municipio: 'Mérida', colonia: 'Itzimná' },
+                '97200': { estado: 'Yucatán', municipio: 'Mérida', colonia: 'México' },
+                '97300': { estado: 'Yucatán', municipio: 'Mérida', colonia: 'Pensiones' },
+                
+                // Chihuahua ampliado
+                '31000': { estado: 'Chihuahua', municipio: 'Chihuahua', colonia: 'Centro' },
+                '31100': { estado: 'Chihuahua', municipio: 'Chihuahua', colonia: 'San Felipe' },
+                '31200': { estado: 'Chihuahua', municipio: 'Chihuahua', colonia: 'Santo Niño' },
+                '32000': { estado: 'Chihuahua', municipio: 'Ciudad Juárez', colonia: 'Centro' },
+                '32300': { estado: 'Chihuahua', municipio: 'Ciudad Juárez', colonia: 'Pronaf' },
+                '32400': { estado: 'Chihuahua', municipio: 'Ciudad Juárez', colonia: 'Las Torres' },
+                
+                // Sonora ampliado
+                '83000': { estado: 'Sonora', municipio: 'Hermosillo', colonia: 'Centro' },
+                '83100': { estado: 'Sonora', municipio: 'Hermosillo', colonia: 'San Benito' },
+                '83200': { estado: 'Sonora', municipio: 'Hermosillo', colonia: 'Pitic' },
+                '83240': { estado: 'Sonora', municipio: 'Hermosillo', colonia: 'Villa de Seris' },
+                '85000': { estado: 'Sonora', municipio: 'Ciudad Obregón', colonia: 'Centro' },
+                
+                // Coahuila ampliado
+                '25000': { estado: 'Coahuila', municipio: 'Saltillo', colonia: 'Centro' },
+                '25100': { estado: 'Coahuila', municipio: 'Saltillo', colonia: 'República' },
+                '25200': { estado: 'Coahuila', municipio: 'Saltillo', colonia: 'Valle del Nazas' },
+                '27000': { estado: 'Coahuila', municipio: 'Torreón', colonia: 'Centro' },
+                '27010': { estado: 'Coahuila', municipio: 'Torreón', colonia: 'Ampliación los Ángeles' },
+                '27100': { estado: 'Coahuila', municipio: 'Torreón', colonia: 'Nueva California' },
+                
+                // Durango ampliado
+                '34000': { estado: 'Durango', municipio: 'Durango', colonia: 'Centro' },
+                '34100': { estado: 'Durango', municipio: 'Durango', colonia: 'Tierra y Libertad' },
+                '34200': { estado: 'Durango', municipio: 'Durango', colonia: 'Benito Juárez' },
+                
+                // Tamaulipas ampliado
+                '24000': { estado: 'Tamaulipas', municipio: 'Tampico', colonia: 'Centro' },
+                '24100': { estado: 'Tamaulipas', municipio: 'Tampico', colonia: 'Vicente Guerrero' },
+                '24200': { estado: 'Tamaulipas', municipio: 'Tampico', colonia: 'Morelos' },
+                '28000': { estado: 'Tamaulipas', municipio: 'Nuevo Laredo', colonia: 'Centro' },
+                '28100': { estado: 'Tamaulipas', municipio: 'Nuevo Laredo', colonia: 'Juárez' },
+                '87000': { estado: 'Tamaulipas', municipio: 'Ciudad Victoria', colonia: 'Centro' },
+                '89000': { estado: 'Tamaulipas', municipio: 'Reynosa', colonia: 'Centro' },
+                '88000': { estado: 'Tamaulipas', municipio: 'Matamoros', colonia: 'Centro' },
+                
+                // Puebla ampliado
+                '72000': { estado: 'Puebla', municipio: 'Puebla', colonia: 'Centro' },
+                '72100': { estado: 'Puebla', municipio: 'Puebla', colonia: 'Analco' },
+                '72400': { estado: 'Puebla', municipio: 'Puebla', colonia: 'La Paz' },
+                '72500': { estado: 'Puebla', municipio: 'Puebla', colonia: 'Cholula' },
+                
+                // Hidalgo ampliado
+                '42000': { estado: 'Hidalgo', municipio: 'Pachuca', colonia: 'Centro' },
+                '42080': { estado: 'Hidalgo', municipio: 'Pachuca', colonia: 'Universidad' },
+                '42100': { estado: 'Hidalgo', municipio: 'Pachuca', colonia: 'Revolución' },
+                
+                // Michoacán ampliado
+                '58000': { estado: 'Michoacán', municipio: 'Morelia', colonia: 'Centro' },
+                '58070': { estado: 'Michoacán', municipio: 'Morelia', colonia: 'Chapultepec Norte' },
+                '58100': { estado: 'Michoacán', municipio: 'Morelia', colonia: 'Félix Ireta' },
+                '59600': { estado: 'Michoacán', municipio: 'Zamora', colonia: 'Centro' },
+                '60000': { estado: 'Michoacán', municipio: 'Uruapan', colonia: 'Centro' },
+                
+                // Oaxaca ampliado
+                '68000': { estado: 'Oaxaca', municipio: 'Oaxaca', colonia: 'Centro' },
+                '68020': { estado: 'Oaxaca', municipio: 'Oaxaca', colonia: 'Jalatlaco' },
+                '68100': { estado: 'Oaxaca', municipio: 'Oaxaca', colonia: 'Xochimilco' },
+                '68200': { estado: 'Oaxaca', municipio: 'Oaxaca', colonia: 'Reforma' },
+                
+                // Estados faltantes importantes
+                // Tabasco
+                '86000': { estado: 'Tabasco', municipio: 'Villahermosa', colonia: 'Centro' },
+                '86100': { estado: 'Tabasco', municipio: 'Villahermosa', colonia: 'Atasta de Serra' },
+                '86200': { estado: 'Tabasco', municipio: 'Villahermosa', colonia: 'Casa Blanca' },
+                
+                // Campeche
+                '24000': { estado: 'Campeche', municipio: 'Campeche', colonia: 'Centro' },
+                '24100': { estado: 'Campeche', municipio: 'Campeche', colonia: 'San Román' },
+                
+                // Guerrero
+                '39000': { estado: 'Guerrero', municipio: 'Chilpancingo', colonia: 'Centro' },
+                '39300': { estado: 'Guerrero', municipio: 'Acapulco', colonia: 'Centro' },
+                '39500': { estado: 'Guerrero', municipio: 'Acapulco', colonia: 'Las Playas' },
+                
+                // Tlaxcala
+                '90000': { estado: 'Tlaxcala', municipio: 'Tlaxcala', colonia: 'Centro' },
+                '90100': { estado: 'Tlaxcala', municipio: 'Tlaxcala', colonia: 'Ocotlán' },
+                
+                // Nayarit
+                '63000': { estado: 'Nayarit', municipio: 'Tepic', colonia: 'Centro' },
+                '63100': { estado: 'Nayarit', municipio: 'Tepic', colonia: 'Fray Junípero Serra' },
+                '63732': { estado: 'Nayarit', municipio: 'Bahía de Banderas', colonia: 'Nuevo Vallarta' },
+                
+                // Colima
+                '28000': { estado: 'Colima', municipio: 'Colima', colonia: 'Centro' },
+                '28100': { estado: 'Colima', municipio: 'Colima', colonia: 'Centro Norte' },
+                '28200': { estado: 'Colima', municipio: 'Manzanillo', colonia: 'Centro' },
+                
+                // Zacatecas
+                '98000': { estado: 'Zacatecas', municipio: 'Zacatecas', colonia: 'Centro' },
+                '98100': { estado: 'Zacatecas', municipio: 'Zacatecas', colonia: 'La Ciénega' },
+                '98600': { estado: 'Zacatecas', municipio: 'Guadalupe', colonia: 'Centro' },
+                
+                // Querétaro
+                '76000': { estado: 'Querétaro', municipio: 'Querétaro', colonia: 'Centro' },
+                '76100': { estado: 'Querétaro', municipio: 'Querétaro', colonia: 'San Sebastián' },
+                '76200': { estado: 'Querétaro', municipio: 'Querétaro', colonia: 'Las Américas' }
+            };
+            
+            function handlePostalCode(input, isRisk = false) {
+                if (!input) return;
+                
+                input.addEventListener('input', function(e) {
+                    let cp = e.target.value.replace(/\D/g, '').substring(0, 5);
+                    e.target.value = cp;
+                    
+                    if (cp.length === 5) {
+                        // Añadir clase de loading
+                        e.target.classList.add('loading');
+                        
+                        setTimeout(() => {
+                            e.target.classList.remove('loading');
+                            
+                            if (postalData[cp]) {
+                                const data = postalData[cp];
+                                
+                                // Actualizar estado solo si es el CP principal
+                                if (!isRisk && estadoSelect) {
+                                    // Buscar la opción exacta en el select
+                                    const options = estadoSelect.querySelectorAll('option');
+                                    let found = false;
+                                    options.forEach(option => {
+                                        if (option.value === data.estado || option.textContent.includes(data.estado)) {
+                                            estadoSelect.value = option.value;
+                                            found = true;
+                                        }
+                                    });
+                                    
+                                    if (!found) {
+                                        // Si no encontramos exacto, crear nueva opción
+                                        const newOption = document.createElement('option');
+                                        newOption.value = data.estado;
+                                        newOption.textContent = data.estado;
+                                        estadoSelect.appendChild(newOption);
+                                        estadoSelect.value = data.estado;
+                                    }
+                                }
+                                
+                                // Autocompletar campos de ubicación si están disponibles
+                                if (!isRisk) {
+                                    // Campos principales (fiscales)
+                                    const municipioInput = document.getElementById('municipio');
+                                    const coloniaInput = document.getElementById('colonia');
+                                    
+                                    if (municipioInput && !municipioInput.value) {
+                                        municipioInput.value = data.municipio;
+                                        municipioInput.style.borderColor = 'var(--success)';
+                                    }
+                                    if (coloniaInput && !coloniaInput.value) {
+                                        coloniaInput.value = data.colonia;
+                                        coloniaInput.style.borderColor = 'var(--success)';
+                                    }
+                                } else {
+                                    // Campos de riesgo
+                                    const coloniaRiesgoInput = document.getElementById('colonia-riesgo');
+                                    if (coloniaRiesgoInput && !coloniaRiesgoInput.value) {
+                                        coloniaRiesgoInput.value = data.colonia;
+                                        coloniaRiesgoInput.style.borderColor = 'var(--success)';
+                                    }
+                                }
+                                
+                                // Mostrar notificación con la información encontrada
+                                showNotification(
+                                    `📍 ${data.colonia}, ${data.municipio}, ${data.estado}`, 
+                                    'success',
+                                    4000
+                                );
+                                
+                                // Efecto visual en el campo
+                                e.target.style.borderColor = 'var(--success)';
+                                e.target.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.2)';
+                            } else {
+                                showNotification('❌ Código postal no encontrado en la base de datos', 'warning');
+                                e.target.style.borderColor = 'var(--warning)';
+                            }
+                        }, 500);
+                    }
+                });
+            }
+            
+            // Configurar ambos campos de CP
+            handlePostalCode(cpInput, false);
+            handlePostalCode(cpRiesgoInput, true);
+        }
+        
+        // Formato de teléfono mexicano MEJORADO
+        function setupPhoneFormatting() {
+            const phoneInputs = document.querySelectorAll('input[type="tel"], #telefono');
+            
+            phoneInputs.forEach(phoneInput => {
+                if (!phoneInput) return;
+                
+                phoneInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    
+                    // Si empieza con 52, lo mantenemos (código de país)
+                    let formatted = '';
+                    
+                    if (value.length <= 12) {
+                        if (value.startsWith('52') && value.length >= 3) {
+                            // Formato: (+52) XXX-XXX-XXXX
+                            const countryCode = value.substring(0, 2);
+                            const areaCode = value.substring(2, 5);
+                            const firstPart = value.substring(5, 8);
+                            const secondPart = value.substring(8, 12);
+                            
+                            formatted = `(+${countryCode})`;
+                            if (areaCode) formatted += areaCode;
+                            if (firstPart) formatted += `-${firstPart}`;
+                            if (secondPart) formatted += `-${secondPart}`;
+                        } else if (value.length >= 10) {
+                            // Formato nacional: (+52) XXX-XXX-XXXX
+                            value = '52' + value.substring(0, 10);
+                            const areaCode = value.substring(2, 5);
+                            const firstPart = value.substring(5, 8);
+                            const secondPart = value.substring(8, 12);
+                            
+                            formatted = `(+52)${areaCode}-${firstPart}-${secondPart}`;
+                        } else {
+                            // Mostrar formato parcial
+                            formatted = value;
+                            if (value.length >= 3) {
+                                formatted = `(+52)${value}`;
+                            }
+                        }
+                    }
+                    
+                    e.target.value = formatted;
+                    
+                    // Validación visual
+                    if (formatted.match(/^\(\+52\)\d{3}-\d{3}-\d{4}$/)) {
+                        e.target.style.borderColor = 'var(--success)';
+                        e.target.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
+                    } else if (formatted.length > 5) {
+                        e.target.style.borderColor = 'var(--warning)';
+                        e.target.style.boxShadow = '0 0 0 3px rgba(245, 158, 11, 0.1)';
+                    } else {
+                        e.target.style.borderColor = 'var(--border)';
+                        e.target.style.boxShadow = 'none';
+                    }
+                });
+                
+                // Placeholder mejorado
+                phoneInput.placeholder = '(+52)667-236-1545';
+            });
+        }
+        
+        // Formato de moneda para campos de suma asegurada
+        function setupCurrencyFormatting() {
+            const currencyFields = document.querySelectorAll('input[id*="suma_"], input[placeholder*="$"]');
+            
+            currencyFields.forEach(field => {
+                field.addEventListener('blur', function(e) {
+                    let value = e.target.value.replace(/[^\d.]/g, '');
+                    if (value && !isNaN(value)) {
+                        e.target.value = `$${parseFloat(value).toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+                    }
+                });
+                
+                field.addEventListener('focus', function(e) {
+                    e.target.value = e.target.value.replace(/[^\d.]/g, '');
+                });
+            });
+        }
+        
+        // Manejo de drag and drop para archivos
+        function dropHandler(ev) {
+            ev.preventDefault();
+            const fileUpload = ev.currentTarget;
+            fileUpload.classList.remove('dragover');
+            
+            if (ev.dataTransfer.items) {
+                const files = Array.from(ev.dataTransfer.files);
+                handleFiles(files, fileUpload);
+            }
+        }
+        
+        function dragOverHandler(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('dragover');
+        }
+        
+        function handleFiles(files, container) {
+            const fileList = container.querySelector('.file-list') || createFileList(container);
+            
+            files.forEach(file => {
+                if (file.size <= 10 * 1024 * 1024) { // 10MB limit
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-size">${formatFileSize(file.size)}</span>
+                        <button type="button" class="file-remove" onclick="removeFile(this)">×</button>
+                    `;
+                    fileList.appendChild(fileItem);
+                } else {
+                    showNotification(`Archivo ${file.name} es muy grande (máximo 10MB)`, 'error');
+                }
+            });
+        }
+        
+        function createFileList(container) {
+            const fileList = document.createElement('div');
+            fileList.className = 'file-list';
+            container.appendChild(fileList);
+            return fileList;
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function removeFile(button) {
+            button.parentElement.remove();
+        }
+        
+        // Sistema de notificaciones
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            // Estilos inline para las notificaciones
+            Object.assign(notification.style, {
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                background: type === 'success' ? '#10b981' : 
+                           type === 'error' ? '#ef4444' : 
+                           type === 'warning' ? '#f59e0b' : '#3b82f6',
+                color: 'white',
+                padding: '1rem 1.5rem',
+                borderRadius: '8px',
+                zIndex: '9999',
+                minWidth: '300px',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                transform: 'translateX(400px)',
+                transition: 'transform 0.3s ease'
+            });
+            
+            document.body.appendChild(notification);
+            
+            // Animar entrada
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Auto-remove después de 4 segundos
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 4000);
+        }
+        
+        // Función para enviar el formulario - SIMPLIFICADA Y FUNCIONAL
+        async function submitForm() {
+            console.log('🚀 Iniciando envío del formulario...');
+            
+            // Mostrar indicador de carga
+            showNotification('📤 Enviando solicitud...', 'info');
+            
+            try {
+                // Cargar EmailJS si no está disponible
+                await loadEmailJSSDK();
+
+                // IDs de EmailJS configurados
+                const SERVICE_ID = 'service_6gnqp8y';
+                const TEMPLATE_ID = 'template_2yre1uf';
+
+                // Obtener datos del formulario de forma simple
+                const form = document.getElementById('wizard-form');
+                const formData = new FormData(form);
+
+                // Crear objeto de parámetros simplificado
+                const params = {
+                    // Datos Fiscales
+                    rfc: formData.get('rfc') || document.getElementById('rfc')?.value || '',
+                    razon_social: formData.get('razon_social') || document.getElementById('razon-social')?.value || '',
+                    telefono: formData.get('telefono') || document.getElementById('telefono')?.value || '',
+                    correo: formData.get('correo') || document.getElementById('correo')?.value || '',
+
+                    // Ubicación de Riesgo
+                    cp_riesgo: formData.get('cp_riesgo') || document.getElementById('cp-riesgo')?.value || document.getElementById('cp')?.value || '',
+                    calle_riesgo: formData.get('calle_riesgo') || document.getElementById('calle-riesgo')?.value || '',
+                    numero_riesgo: formData.get('numero_riesgo') || document.getElementById('numero-riesgo')?.value || '',
+                    colonia_riesgo: formData.get('colonia_riesgo') || document.getElementById('colonia-riesgo')?.value || '',
+                    referencias: formData.get('referencias') || document.getElementById('referencias')?.value || '',
+
+                    // Características Constructivas
+                    anio_construccion: formData.get('anio_construccion') || document.getElementById('anio-construccion')?.value || '',
+                    niveles: formData.get('niveles') || document.getElementById('niveles')?.value || '',
+                    uso_inmueble: formData.get('uso_inmueble') || document.getElementById('uso-inmueble')?.value || '',
+                    tipo_construccion: formData.get('tipo_construccion') || document.getElementById('tipo-construccion')?.value || '',
+
+                    // Coberturas
+                    suma_edificio: formData.get('suma_edificio') || document.getElementById('suma-edificio')?.value || '',
+                    suma_contenidos: formData.get('suma_contenidos') || document.getElementById('suma-contenidos')?.value || '',
+                    cobertura_extra: 'Formulario enviado desde web',
+
+                    // Datos finales
+                    nombre_asegurado: formData.get('nombre_asegurado') || document.getElementById('nombre_asegurado')?.value || '',
+                    fecha_firma: formData.get('fecha_firma') || document.getElementById('fecha_firma')?.value || new Date().toISOString().split('T')[0],
+
+                    // Adjuntos
+                    documentos_links: 'Formulario web',
+
+                    // Año actual
+                    year: new Date().getFullYear(),
+                };
+
+                console.log('📨 Enviando con EmailJS...', params);
+                const result = await (window as any).emailjs.send(SERVICE_ID, TEMPLATE_ID, params);
+                console.log('✅ EmailJS resultado:', result);
+
+                // Éxito UI
+                showNotification('🎉 ¡FORMULARIO ENVIADO EXITOSAMENTE!', 'success');
+                setTimeout(() => {
+                    showNotification('📧 Revisa tu correo en gael.madrid.2009@gmail.com', 'info');
+                }, 2000);
+                
+                const submitButton = document.querySelector('.btn-submit');
+                if (submitButton) {
+                    submitButton.textContent = '✅ Enviado Exitosamente';
+                    submitButton.style.background = '#10b981';
+                    submitButton.disabled = true;
+                }
+                
+                if (typeof showSuccessModal === 'function') {
+                    showSuccessModal();
+                }
+
+            } catch (error) {
+                console.error('❌ Error al enviar con EmailJS:', error);
+                let errorMessage = 'No se pudo enviar el formulario';
+                
+                if (error && typeof error === 'object') {
+                    if ('text' in error) {
+                        errorMessage = String(error.text);
+                    } else if ('message' in error) {
+                        errorMessage = String(error.message);
+                    }
+                }
+                
+                showNotification(`❌ Error: ${errorMessage}`, 'error');
+            }
+        }
+        
+        // Función para manejar checkbox "misma dirección"
+        function setupSameAddressToggle() {
+            const sameAddressCheckbox = document.getElementById('same-address');
+            const riskAddressFields = document.getElementById('risk-address-fields');
+            
+            if (sameAddressCheckbox && riskAddressFields) {
+                sameAddressCheckbox.addEventListener('change', function(e) {
+                    if (e.target.checked) {
+                        riskAddressFields.style.opacity = '0.5';
+                        riskAddressFields.style.pointerEvents = 'none';
+                        
+                        // Copiar datos de dirección fiscal
+                        const cp = document.getElementById('cp').value;
+                        const cpRiesgo = document.getElementById('cp-riesgo');
+                        if (cpRiesgo) cpRiesgo.value = cp;
+                        
+                        showNotification('Los datos de la dirección fiscal se han copiado', 'info');
+                    } else {
+                        riskAddressFields.style.opacity = '1';
+                        riskAddressFields.style.pointerEvents = 'auto';
+                    }
+                });
+            }
+        }
+        
+        // Inicializar todas las funcionalidades al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedTheme(); // Cargar tema guardado PRIMERO
+            updateWizard();
+            updateProgress();
+            setupPostalCodeAutocomplete();
+            setupPhoneFormatting();
+            setupCurrencyFormatting();
+            setupSameAddressToggle();
+            
+            // Cargar EmailJS SDK dinámicamente e inicializar con PUBLIC KEY
+            (function loadEmailJSSDK() {
+                // @ts-ignore - emailjs global
+                if (window.emailjs) {
+                    try { 
+                        // @ts-ignore
+                        window.emailjs.init('9uhWKUO7vI9o1xXgK'); 
+                    } catch(e) {}
+                    return;
+                }
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                s.async = true;
+                s.onload = function() {
+                    try {
+                        // @ts-ignore - emailjs global
+                        window.emailjs.init('9uhWKUO7vI9o1xXgK'); // Public Key
+                        console.log('✅ EmailJS inicializado');
+                    } catch (e) {
+                        console.error('❌ No se pudo inicializar EmailJS:', e);
+                    }
+                };
+                s.onerror = function() {
+                    console.error('❌ Error al cargar el SDK de EmailJS');
+                };
+                document.head.appendChild(s);
+            })();
+            
+            // Configurar navegación por clicks en los pasos
+            document.querySelectorAll('.nav-step').forEach((step, index) => {
+                step.addEventListener('click', () => {
+                    goToStep(index + 1);
+                });
+            });
+            
+            // Configurar file upload click
+            document.querySelectorAll('.file-upload').forEach(upload => {
+                upload.addEventListener('click', function() {
+                    const fileInput = this.querySelector('input[type="file"]');
+                    if (fileInput) {
+                        fileInput.click();
+                    }
+                });
+            });
+            
+            // Configurar el input de archivos
+            document.querySelectorAll('input[type="file"]').forEach(input => {
+                input.addEventListener('change', function(e) {
+                    const files = Array.from(e.target.files);
+                    const container = e.target.closest('.file-upload');
+                    handleFiles(files, container);
+                });
+            });
+            
+            // Configurar fecha actual por defecto
+            const fechaFirma = document.getElementById('fecha_firma');
+            if (fechaFirma) {
+                fechaFirma.value = new Date().toISOString().split('T')[0];
+            }
+            
+            // Mostrar mensaje de bienvenida
+            setTimeout(() => {
+                showNotification('¡Bienvenido al formulario inteligente! Completa cada sección paso a paso.', 'info');
+            }, 1000);
+        });
+        
+        // Manejo de teclado para navegación
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        prevStep();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        nextStep();
+                        break;
+                }
+            }
+        });
+        
+        // Función para toggle de tema - MEJORADA
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            body.classList.toggle('dark-theme');
+            
+            // Guardar preferencia en localStorage
+            const isDarkMode = body.classList.contains('dark-theme');
+            localStorage.setItem('darkMode', isDarkMode);
+            
+            // Actualizar icono con animación
+            themeIcon.style.transform = 'rotate(180deg)';
+            
+            setTimeout(() => {
+                if (isDarkMode) {
+                    themeIcon.textContent = '☀️';
+                    showNotification('🌙 Modo oscuro activado', 'info');
+                } else {
+                    themeIcon.textContent = '🌙';
+                    showNotification('☀️ Modo claro activado', 'info');
+                }
+                themeIcon.style.transform = 'rotate(0deg)';
+            }, 150);
+        }
+        
+        // Cargar tema guardado al inicializar
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('darkMode');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'true') {
+                document.body.classList.add('dark-theme');
+                if (themeIcon) themeIcon.textContent = '☀️';
+            } else {
+                if (themeIcon) themeIcon.textContent = '🌙';
+            }
+        }
+        
+        // Función para mostrar modal de éxito
+        function showSuccessModal() {
+            // Crear modal si no existe
+            let modal = document.getElementById('success-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'success-modal';
+                modal.innerHTML = `
+                    <div class="modal-overlay" onclick="closeSuccessModal()">
+                        <div class="modal-content" onclick="event.stopPropagation()">
+                            <div class="modal-header">
+                                <h2>🎉 ¡Formulario Enviado Exitosamente!</h2>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>✅ Su solicitud ha sido procesada correctamente</strong></p>
+                                <br>
+                                <p>📧 <strong>Se ha enviado una copia a:</strong><br>
+                                   <code>gael.madrid.2009@gmail.com</code></p>
+                                <br>
+                                <p>⏰ <strong>Tiempo de respuesta:</strong> 24-48 horas hábiles</p>
+                                <p>📱 <strong>También puede contactarnos:</strong> (+52) 667-236-1545</p>
+                                <br>
+                                <p><em>¡Gracias por confiar en nuestros servicios!</em></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" onclick="closeSuccessModal()">Entendido</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Añadir estilos al modal
+                const modalStyles = `
+                    #success-modal .modal-overlay {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.5);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 10000;
+                        backdrop-filter: blur(5px);
+                        animation: fadeIn 0.3s ease;
+                    }
+                    
+                    #success-modal .modal-content {
+                        background: var(--background-card);
+                        border-radius: var(--radius-lg);
+                        max-width: 500px;
+                        width: 90%;
+                        box-shadow: var(--shadow-hover);
+                        animation: slideInUp 0.4s ease;
+                    }
+                    
+                    #success-modal .modal-header {
+                        padding: 2rem 2rem 1rem;
+                        text-align: center;
+                        border-bottom: 1px solid var(--border);
+                    }
+                    
+                    #success-modal .modal-header h2 {
+                        color: var(--success);
+                        margin: 0;
+                        font-size: 1.5rem;
+                    }
+                    
+                    #success-modal .modal-body {
+                        padding: 1.5rem 2rem;
+                        line-height: 1.6;
+                        color: var(--text);
+                    }
+                    
+                    #success-modal .modal-body code {
+                        background: var(--primary-light);
+                        padding: 0.25rem 0.5rem;
+                        border-radius: 4px;
+                        font-family: monospace;
+                        color: var(--primary-solid);
+                    }
+                    
+                    #success-modal .modal-footer {
+                        padding: 1rem 2rem 2rem;
+                        text-align: center;
+                    }
+                    
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    
+                    @keyframes slideInUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(30px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                `;
+                
+                // Añadir estilos
+                const styleSheet = document.createElement('style');
+                styleSheet.textContent = modalStyles;
+                document.head.appendChild(styleSheet);
+                
+                document.body.appendChild(modal);
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        // Función para cerrar modal de éxito
+        function closeSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Hacer las funciones accesibles globalmente
+        window.showSuccessModal = showSuccessModal;
+        window.closeSuccessModal = closeSuccessModal;
+
+        // Cargar EmailJS SDK
+        function loadEmailJSSDK() {
+            return new Promise((resolve, reject) => {
+                // Check if already loaded
+                if ((window as any).emailjs) {
+                    resolve((window as any).emailjs);
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                script.async = true;
+                
+                script.onload = () => {
+                    try {
+                        (window as any).emailjs.init('9uhWKUO7vI9o1xXgK');
+                        console.log('✅ EmailJS inicializado correctamente');
+                        resolve((window as any).emailjs);
+                    } catch (error) {
+                        console.error('❌ Error al inicializar EmailJS:', error);
+                        reject(error);
+                    }
+                };
+                
+                script.onerror = () => {
+                    reject(new Error('No se pudo cargar EmailJS SDK'));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+
+        // Preload EmailJS SDK
+        loadEmailJSSDK().catch(error => {
+            console.warn('⚠️ EmailJS no se pudo cargar previamente:', error);
+        });
+    </script>
+    
+    <!-- Estilos adicionales para notificaciones y archivos -->
+    <style>
+        .file-list {
+            margin-top: 1rem;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .file-name {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .file-size {
+            color: var(--text-light);
+            margin: 0 1rem;
+        }
+        
+        .file-remove {
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .file-remove:hover {
+            background: #dc2626;
+        }
+        
+        /* Animaciones adicionales */
+        .form-step {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-step {
+            cursor: pointer;
+        }
+        
+        .nav-step:hover:not(.active) {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Mejoras visuales para campos inválidos */
+        input:invalid {
+            border-color: var(--error);
+        }
+        
+        input:valid {
+            border-color: var(--success);
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 640px) {
+            .notification {
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+            }
+        }
+    </style>
+</body>
+</html>

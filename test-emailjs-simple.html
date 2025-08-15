@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba EmailJS Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #002366;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #002366;
+        }
+        .btn {
+            background: linear-gradient(135deg, #002366 0%, #003d82 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: linear-gradient(135deg, #003d82 0%, #002366 100%);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border-left: 4px solid #002366;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Prueba EmailJS Simple</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Usando el código exacto que proporcionaste
+        </p>
+
+        <form id="formulario">
+            <div class="form-group">
+                <label for="nombre">Nombre *</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mensaje">Mensaje</label>
+                <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe un mensaje..."></textarea>
+            </div>
+
+            <button type="submit" class="btn">
+                🚀 Enviar Solicitud
+            </button>
+        </form>
+
+        <div class="status">
+            <h3>📋 Configuración:</h3>
+            <ul>
+                <li><strong>Public Key:</strong> 9uhWKUO7vI9o1xXgK</li>
+                <li><strong>Service ID:</strong> service_6gnqp8y</li>
+                <li><strong>Template ID:</strong> template_2yre1uf</li>
+                <li><strong>Email destino:</strong> gael.madrid.2009@gmail.com</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px;">
+            <h3>✅ Instrucciones:</h3>
+            <ol>
+                <li>Completa el nombre y email</li>
+                <li>Haz clic en "Enviar Solicitud"</li>
+                <li>Verifica el alert de éxito</li>
+                <li>Revisa tu email en gael.madrid.2009@gmail.com</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <script type="text/javascript">
+        // Inicializa EmailJS con tu Public Key
+        emailjs.init('9uhWKUO7vI9o1xXgK');
+
+        document.getElementById('formulario').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita recargar la página
+
+            emailjs.sendForm('service_6gnqp8y', 'template_2yre1uf', this)
+                .then(function() {
+                    alert('Solicitud enviada correctamente 🎉');
+                }, function(error) {
+                    alert('Ocurrió un error: ' + JSON.stringify(error));
+                });
+        });
+    </script>
+</body>
+</html>
