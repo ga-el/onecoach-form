@@ -22,125 +22,151 @@ const formattedDate = today.toLocaleDateString('es-MX', {
 ---
 
 <div class="wpforms-container">
+  <!-- Form Navigation -->
+  <div class="form-navigation">
+    <a href="#" class="form-nav-item active" data-section="0">Datos Generales</a>
+    <a href="#" class="form-nav-item" data-section="1">Detalles</a>
+    <a href="#" class="form-nav-item" data-section="2">Pago</a>
+  </div>
+  
   <form id="multiple-empresarial-form" class="wpforms-form">
-    <!-- Header -->
-    <div class="wpforms-head-container">
-      <div class="wpforms-title">{formConfig.title}</div>
-    </div>
-
-    <!-- Agent and Date -->
-    <div class="wpforms-field-container">
-      <div class="wpforms-field">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="nombre-agente">NOMBRE DEL AGENTE</label>
-            <input type="text" id="nombre-agente" name="nombre_agente" required>
-          </div>
-          <div class="form-group">
-            <label for="fecha">FECHA</label>
-            <input type="date" id="fecha" name="fecha" value={formattedDate}>
-          </div>
-        </div>
+    <!-- Section 1: Datos Generales -->
+    <div class="form-section">
+      <div class="wpforms-head-container">
+        <div class="wpforms-title">{formConfig.title}</div>
       </div>
 
-      <!-- Clave Section -->
-      <div class="wpforms-field">
-        <div class="form-row">
-          <div class="form-group">
-            <fieldset>
-              <legend>Casillas de verificación</legend>
-              <div class="checkbox-group">
-                <label class="checkbox-label">
-                  <input type="checkbox" name="clave[]" value="CLAVE ONE COACH">
-                  <span>CLAVE ONE COACH</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="clave[]" value="CLAVE AGENTE">
-                  <span>CLAVE AGENTE</span>
-                </label>
-              </div>
-            </fieldset>
-          </div>
-          <div class="form-group">
-            <label for="clave-numero">CLAVE :</label>
-            <input type="text" id="clave-numero" name="clave_numero">
-          </div>
-        </div>
-      </div>
-
-      <!-- Cotización Section -->
-      <div class="section-divider">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input type="checkbox" name="cotizacion" value="COTIZACIÓN" required>
-              <span>COTIZACIÓN</span>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Moneda y Vigencia -->
-      <div class="section-divider">
-        <div class="form-row">
-          <div class="form-group">
-            <h3>MONEDA:</h3>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" name="moneda" value="NACIONAL" required>
-                <span>NACIONAL</span>
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="moneda" value="DÓLARES" required>
-                <span>DÓLARES</span>
-              </label>
+      <!-- Agent and Date -->
+      <div class="wpforms-field-container">
+        <div class="wpforms-field">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre-agente">NOMBRE DEL AGENTE</label>
+              <input type="text" id="nombre-agente" name="nombre_agente" required>
             </div>
-          </div>
-          <div class="form-group">
-            <h3>VIGENCIA:</h3>
-            <div class="date-range">
-              <div class="form-group">
-                <label for="fecha-desde">DESDE:</label>
-                <input type="date" id="fecha-desde" name="fecha_desde" required>
-              </div>
-              <div class="form-group">
-                <label for="fecha-hasta">HASTA:</label>
-                <input type="date" id="fecha-hasta" name="fecha_hasta" required>
-              </div>
+            <div class="form-group">
+              <label for="fecha">FECHA</label>
+              <input type="date" id="fecha" name="fecha" value={formattedDate} required>
             </div>
           </div>
         </div>
+
+      <!-- Section 1: Información General -->
+      <div class="form-section">
+        <h3>INFORMACIÓN GENERAL</h3>
+        
+        <!-- Clave Section -->
+        <div class="wpforms-field">
+          <div class="form-row">
+            <div class="form-group">
+              <fieldset>
+                <legend>Casillas de verificación</legend>
+                <div class="checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="clave[]" value="CLAVE ONE COACH" required>
+                    <span>CLAVE ONE COACH</span>
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="clave[]" value="CLAVE AGENTE">
+                    <span>CLAVE AGENTE</span>
+                  </label>
+                </div>
+              </fieldset>
+            </div>
+            <div class="form-group">
+              <label for="clave-numero">CLAVE :</label>
+              <input type="text" id="clave-numero" name="clave_numero" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cotización Section -->
+        <div class="section-divider">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="cotizacion" value="COTIZACIÓN" required>
+                <span>COTIZACIÓN</span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Forma de Pago -->
-      <div class="section-divider">
-        <h3>FORMA DE PAGO:</h3>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input type="checkbox" name="pago[]" value="ANUAL">
-              <span>ANUAL</span>
-            </label>
-            <label class="checkbox-label">
-              <input type="checkbox" name="pago[]" value="SEMESTRAL">
-              <span>SEMESTRAL</span>
-            </label>
-            <label class="checkbox-label">
-              <input type="checkbox" name="pago[]" value="TRIMESTRAL">
-              <span>TRIMESTRAL</span>
-            </label>
-            <label class="checkbox-label">
-              <input type="checkbox" name="pago[]" value="MENSUAL">
-              <span>MENSUAL</span>
-            </label>
+      <!-- Section 2: Detalles -->
+      <div class="form-section">
+        <h3>DETALLES</h3>
+        
+        <!-- Moneda y Vigencia -->
+        <div class="section-divider">
+          <div class="form-row">
+            <div class="form-group">
+              <h3>MONEDA:</h3>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="moneda" value="NACIONAL" required>
+                  <span>NACIONAL</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="moneda" value="DÓLARES" required>
+                  <span>DÓLARES</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <h3>VIGENCIA:</h3>
+              <div class="date-range">
+                <div class="form-group">
+                  <label for="fecha-desde">DESDE:</label>
+                  <input type="date" id="fecha-desde" name="fecha_desde" required>
+                </div>
+                <div class="form-group">
+                  <label for="fecha-hasta">HASTA:</label>
+                  <input type="date" id="fecha-hasta" name="fecha_hasta" required>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Pago -->
+      <div class="form-section">
+        <h3>INFORMACIÓN DE PAGO</h3>
+        
+        <!-- Forma de Pago -->
+        <div class="section-divider">
+          <h3>FORMA DE PAGO:</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="pago[]" value="ANUAL" required>
+                <span>ANUAL</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="pago[]" value="SEMESTRAL">
+                <span>SEMESTRAL</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="pago[]" value="TRIMESTRAL">
+                <span>TRIMESTRAL</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="pago[]" value="MENSUAL">
+                <span>MENSUAL</span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Submit Button -->
-    <div class="form-actions">
-      <button type="submit" class="submit-button" id="submit-btn">Enviar</button>
+      <!-- Navigation Buttons -->
+      <div class="form-actions">
+        <button type="button" class="nav-button prev-button" id="prev-btn" style="display: none;">Anterior</button>
+        <button type="button" class="nav-button next-button" id="next-btn">Siguiente</button>
+        <button type="submit" class="submit-button" id="submit-btn" style="display: none;">Enviar</button>
+      </div>
     </div>
   </form>
 </div>
@@ -228,23 +254,79 @@ const formattedDate = today.toLocaleDateString('es-MX', {
   }
 
   /* Section Dividers */
-  .section-divider {
-    padding: 1.5rem 0;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 1.5rem;
+  .form-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+    display: none; /* Hidden by default */
   }
-
-  .section-divider h3 {
+  
+  .form-section:first-child {
+    display: block; /* Show first section by default */
+  }
+  
+  .form-section h3 {
     color: var(--primary, #002366);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--primary, #002366);
+  }
+  
+  /* Show active section */
+  .form-section.active {
+    display: block;
   }
 
   /* Buttons */
+  .form-navigation {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
+  
+  .form-nav-item {
+    padding: 0.5rem 1rem;
+    background: #f0f0f0;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  
+  .form-nav-item.active {
+    background: var(--primary, #002366);
+    color: white;
+  }
+  
   .form-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+  }
+  
+  .nav-button {
+    padding: 0.5rem 1.5rem;
+    border: 1px solid var(--primary, #002366);
+    background: white;
+    color: var(--primary, #002366);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .nav-button:hover {
+    background: #f0f0f0;
+  }
+  
+  .error {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 0 1px #ff4444;
   }
 
   .submit-button {
@@ -562,25 +644,167 @@ const formattedDate = today.toLocaleDateString('es-MX', {
   }
 
   // Set default dates
+  // Function to validate current section
+  function validateCurrentSection(sectionIndex: number): boolean {
+    const sections = document.querySelectorAll<HTMLElement>('.form-section');
+    if (sectionIndex >= sections.length) return true;
+    
+    const currentSection = sections[sectionIndex];
+    const requiredFields = currentSection.querySelectorAll<HTMLInputElement>('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+      if ((field.type === 'checkbox' && !field.checked) || 
+          (field.type !== 'checkbox' && !(field as HTMLInputElement).value.trim())) {
+        isValid = false;
+        field.classList.add('error');
+      } else {
+        field.classList.remove('error');
+      }
+    });
+    
+    if (!isValid) {
+      showNotification('Por favor completa todos los campos requeridos antes de continuar', 'error');
+      currentSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    return isValid;
+  }
+
+  // Function to handle section navigation
+  function goToSection(sectionIndex: number) {
+    const sections = document.querySelectorAll<HTMLElement>('.form-section');
+    const navItems = document.querySelectorAll<HTMLElement>('.form-nav-item');
+    
+    // Hide all sections
+    sections.forEach(section => {
+      section.style.display = 'none';
+    });
+    
+    // Update navigation items
+    navItems.forEach((item, index) => {
+      if (index === sectionIndex) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Show selected section
+    if (sections[sectionIndex]) {
+      sections[sectionIndex].style.display = 'block';
+    }
+    
+    // Update navigation buttons
+    const prevButton = document.getElementById('prev-btn') as HTMLButtonElement;
+    const nextButton = document.getElementById('next-btn') as HTMLButtonElement;
+    const submitButton = document.getElementById('submit-btn') as HTMLButtonElement;
+    
+    if (sectionIndex === 0) {
+      prevButton.style.display = 'none';
+      nextButton.style.display = 'inline-block';
+      submitButton.style.display = 'none';
+    } else if (sectionIndex === sections.length - 1) {
+      prevButton.style.display = 'inline-block';
+      nextButton.style.display = 'none';
+      submitButton.style.display = 'inline-block';
+    } else {
+      prevButton.style.display = 'inline-block';
+      nextButton.style.display = 'inline-block';
+      submitButton.style.display = 'none';
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     // Set default end date to 1 year from now
-    const startDateInput = document.getElementById('fecha-desde');
-    const endDateInput = document.getElementById('fecha-hasta');
+    const startDateInput = document.getElementById('fecha-desde') as HTMLInputElement;
+    const endDateInput = document.getElementById('fecha-hasta') as HTMLInputElement;
     
+    // Initialize form sections
+    const form = document.getElementById('multiple-empresarial-form') as HTMLFormElement;
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('.form-section'));
+    let currentSectionIndex = 0;
+    
+    // Hide all sections except the first one
+    sections.forEach((section, index) => {
+      if (index !== 0) {
+        section.style.display = 'none';
+      }
+    });
+    
+    // Add navigation event listeners
+    document.querySelectorAll<HTMLElement>('.form-nav-item').forEach((item, index) => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const targetStep = index;
+
+    // Solo permite avanzar si el paso actual está válido
+    if (targetStep > currentSectionIndex) {
+      if (validateCurrentSection(currentSectionIndex)) {
+        currentSectionIndex = targetStep;
+        goToSection(targetStep);
+      } else {
+        showNotification('❌ Debes completar los campos del paso actual antes de continuar.', 'error');
+        return;
+      }
+    } else {
+      // Permite retroceder sin validación
+      currentSectionIndex = targetStep;
+      goToSection(targetStep);
+    }
+  });
+});
+    
+    // Add next/prev button event listeners
+    const nextButton = document.getElementById('next-btn') as HTMLButtonElement;
+    const prevButton = document.getElementById('prev-btn') as HTMLButtonElement;
+    
+    nextButton?.addEventListener('click', () => {
+      if (validateCurrentSection(currentSectionIndex)) {
+        currentSectionIndex++;
+        goToSection(currentSectionIndex);
+      }
+    });
+    
+    prevButton?.addEventListener('click', () => {
+      currentSectionIndex--;
+      goToSection(currentSectionIndex);
+    });
+    
+    // Set default dates if not already set
     if (startDateInput && !startDateInput.value) {
       const today = new Date();
-      startDateInput.valueAsDate = today;
+      const formattedToday = today.toISOString().split('T')[0];
+      startDateInput.value = formattedToday;
       
       const oneYearLater = new Date(today);
       oneYearLater.setFullYear(today.getFullYear() + 1);
-      endDateInput.valueAsDate = oneYearLater;
+      const formattedOneYearLater = oneYearLater.toISOString().split('T')[0];
+      
+      if (endDateInput) {
+        endDateInput.value = formattedOneYearLater;
+      }
     }
     
     // Form submission
-    const form = document.getElementById('multiple-empresarial-form');
-    if (form) {
-      form.addEventListener('submit', handleFormSubmit);
-    }
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Validate all sections before submission
+      let allSectionsValid = true;
+      for (let i = 0; i < sections.length; i++) {
+        if (!validateCurrentSection(i)) {
+          allSectionsValid = false;
+          goToSection(i);
+          break;
+        }
+      }
+      
+      if (allSectionsValid) {
+        handleFormSubmit(e);
+      }
+    });
     
     // Preload EmailJS SDK
     loadEmailJSSDK().catch(error => {
